@@ -1,0 +1,43 @@
+{% ckan_extends %}
+
+{% block package_basic_fields_custom %}
+
+  {{ super() }}
+
+  {% resource 'topics/topic_subtopic_filter.js' %}
+
+  <div id="topic-subtopic-selectors" data-module="topic_subtopic_filter">
+
+    <!-- Custom Topics vocabulary -->
+    <div class="form-group control-small">
+      <label class="control-label" for="field-custom_topic">Topic</label>
+      <div class="controls">
+        <select id="field-custom_topic" name="custom_topic" style="min-width: 50%">
+          <option></option>
+          {% for custom_topic in h.custom_topics()  %}
+            <option value="{{ custom_topic['name'] }}" {% if custom_topic['name'] in data.get('custom_topic', []) %}selected="selected"{% endif %}>
+              {{ custom_topic['display_name'] }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Custom Subtopics vocabulary -->
+    <div class="form-group control-small">
+      <label class="control-label" for="field-custom_subtopic">Subtopic</label>
+      <div class="controls">
+        <select id="field-custom_subtopic" name="custom_subtopic" style="min-width: 50%">
+          <option></option>
+          {% for custom_subtopic in h.custom_subtopics()  %}
+            <option value="{{ custom_subtopic['name'] }}" {% if custom_subtopic['name'] in data.get('custom_subtopic', []) %}selected="selected"{% endif %}>
+              {{ custom_subtopic['display_name'] }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

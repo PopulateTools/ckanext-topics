@@ -1,0 +1,9 @@
+{% extends "page.html" %}
+
+{% block subtitle %}Topics{% endblock %}
+
+{% block breadcrumb_content %}
+
+  <li>{% link_for 'Topics', controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% ckan_extends %}
+
+{% block extras %}
+
+  {{ super() }}
+
+  {% if pkg_dict.custom_topic %}
+    <tr>
+      <th scope="row" class="dataset-label">Topic</th>
+      <td class="dataset-details">
+        {% for element in pkg_dict.custom_topic %}
+          {{ h.topic_display_name(element) }}
+        {% endfor %}
+      </td>
+    </tr>
+  {% endif %}
+
+  {% if pkg_dict.custom_subtopic %}
+    <tr>
+      <th scope="row" class="dataset-label">Subtopic</th>
+      <td class="dataset-details">
+        {% for element in pkg_dict.custom_subtopic %}
+          {{ h.topic_display_name(element) }}
+        {% endfor %}
+      </td>
+    </tr>
+  {% endif %}
+
+{% endblock %}

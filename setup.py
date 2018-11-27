@@ -84,6 +84,9 @@ setup(
 
         [babel.extractors]
         ckan = ckan.lib.extract:extract_ckan
+
+        [paste.paster_command]
+        seed_command=ckanext.topics.commands.seed_command:SeedCommand
     ''',
 
     # If you are changing from the default layout of your extension, you may

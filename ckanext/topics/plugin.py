@@ -110,13 +110,11 @@ class TopicsPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     ## IFacets
 
     def dataset_facets(self, facets_dict, package_type):
-        return OrderedDict([
-            ('vocab_custom_topics', 'Topics'),
-            ('vocab_custom_subtopics', 'Subtopics'),
-            ('tags', toolkit._('Tags')),
-            ('res_format', toolkit._('Formats')),
-            ('organization', toolkit._('Organizations'))
-        ])
+        facets_dict['vocab_custom_topics'] = toolkit._('Topics')
+        facets_dict['vocab_custom_subtopics'] = toolkit._('Subtopics')
+
+        return facets_dict
+
 
     ## IRoutes
 

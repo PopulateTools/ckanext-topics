@@ -2,39 +2,46 @@
 
 {% block breadcrumb_content %}
   <li>{% link_for 'Topics', controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
-  <li class="active">{{ topic['display_name'] }}</li>
+  <li class="active">
+    {% if topic.id %}{{ topic.name }}{% else %}{{ _('New') }}{% endif %}
+  </li>
 {% endblock %}
 
 {% block primary %}
 <div class="primary col-sm-12 col-xs-12">
   <form action="{{ controller_action }}">
 
-    <div class="form-group control-full">
-      <label class="control-label" for="topic_id">ID</label>
-      <div class="controls ">
-        <input class="form-control" type="text" name="topic_id" value="{{ topic['id'] }}" readonly>
+    {% if topic.id %}
+      <input class="form-control" type="hidden" name="topic_id" value="{{ topic.id }}">
+    {% endif %}
+
+    {% for locale in h.available_locales() %}
+      <div class="form-group control-full">
+        <label class="control-label" for="topic_name{{ locale }}">{{ _('Name') }} ({{ locale | upper }})</label>
+        <div class="controls ">
+          {% set topic_name = h.extract_term_translation(topic.name_term_translations, locale) %}
+          <input class="form-control" type="text" name="topic_name_{{ locale }}" maxlength="64" value="{{ topic_name if topic_name }}">
+        </div>
       </div>
-    </div>
-
-    <input type="hidden" name="topic_name" value="{{ topic['name'] }}">
+    {% endfor %}
 
     <div class="form-group control-full">
-      <label class="control-label" for="topic_display_name">Name</label>
+      <label class="control-label" for="topic_index">{{ _('Position') }}</label>
       <div class="controls ">
-        <input class="form-control" type="text" name="topic_display_name" value="{{ topic['display_name'] }}">
-      </div>
-    </div>
-
-    <div class="form-group control-full">
-      <label class="control-label" for="topic_index">Index</label>
-      <div class="controls ">
-        <input class="form-control" type="text" name="topic_index" value="{{ topic['index'] }}">
+        <input class="form-control" type="number" min="0" name="topic_position" value="{{ topic.position }}">
       </div>
     </div>
 
     <div class="form-actions">
-      <a class="btn btn-danger pull-left" href="{{ h.url_for('topic_destroy', id=topic['id']) }}" data-module="confirm-action" data-module-content="Do you really want to delete this topic and its subtopics? The topic and subtopics will be removed from the linked datasets.">Delete</a>
-      <button class="btn btn-primary" name="save" type="submit">Update</button>
+      {% if topic.id %}
+        <a class="btn btn-danger pull-left" href="{{ h.url_for('topic_destroy', id=topic.id) }}" data-module="confirm-action"
+           data-module-content="{{ _('Do you really want to delete this topic and its subtopics? The topic and subtopics will be removed from the linked datasets.') }}">
+          {{ _('Delete') }}
+        </a>
+        <button class="btn btn-primary" name="save" type="submit">{{ _('Update') }}</button>
+      {% else %}
+        <button class="btn btn-primary" name="save" type="submit">{{ _('Create') }}</button>
+      {% endif %}
     </div>
 
   </form>

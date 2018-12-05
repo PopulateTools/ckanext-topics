@@ -3,14 +3,18 @@
 import ckan.plugins.toolkit as t
 import ckan.model as model
 import ckan.lib.base as base
+import ckan.lib.helpers as h
 
 from ckan.model import Tag
-from ckan.common import _
+from ckan.common import _, c, json
 
 from ckanext.topics.lib.topic import Topic
+from ckanext.topics.lib.topic_decorator import TopicDecorator
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.tools import *
 from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
+
+from sqlalchemy.exc import IntegrityError
 
 
 class TopicController(t.BaseController):
@@ -24,102 +28,103 @@ class TopicController(t.BaseController):
             base.abort(403, _('Not authorized to see this page'))
 
     def index(self):
-        topics = Topic.all()
+        topics = []
         subtopics = Subtopic.all()
 
-        for topic in topics:
-            topic['subtopics'] = []
-            for subtopic in subtopics:
-                if (topic['id'] == subtopic['topic_id']):
-                   topic['subtopics'].append(subtopic)
+        for raw_topic in Topic.all():
+            topic = TopicDecorator(raw_topic)
+            topic.load_subtopics()
+            topics.append(topic)
 
         extra_vars = { 'topics': topics }
 
         return t.render('topic/index.html', extra_vars=extra_vars)
 
     def new(self):
-        extra_vars = { 'topic': {}, 'controller_action': 'create' }
+        topic = TopicDecorator({ 'position': Topic.get_new_topic_index() })
+        extra_vars = { 'topic': topic, 'controller_action': 'create' }
 
         return t.render('topic/edit.html', extra_vars=extra_vars)
 
     def create(self):
+        params = t.request.params
         context = { 'user': t.c.user }
+        position = params['topic_position']
+        error = None
 
-        if (Topic.count() >= AlphabeticIndex.max_items()):
-            t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
+        # create topic
+        try:
+            tag = t.get_action('topic_create')(context, { 'name': position, 'vocabulary_id': Topic.vocabulary_id() })
+            names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
+            Topic.update_name(tag['id'], names)
+        except IntegrityError as e:
+            error = _('Position is already taken')
 
-        display_name = t.request.params['topic_display_name']
-        full_name = str(Topic.get_new_topic_index()) + '_' + display_name
+        if error:
+            h.flash_error(error)
+        else:
+            h.flash_success(_('Topic created successfully'))
 
-        t.get_action('tag_create')(context, { 'name': full_name, 'vocabulary_id': Topic.vocabulary_id() })
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
 
     def edit(self):
         topic_id = t.request.params['id']
-        topic    = Topic.find(topic_id)
+        topic    = TopicDecorator(Topic.find(topic_id))
 
-        extra_vars = {
-            'topic': topic,
-            'subtopics': Subtopic.by_topic(topic_id),
-            'controller_action': 'update'
-        }
+        extra_vars = { 'topic': topic, 'controller_action': 'update' }
 
         return t.render('topic/edit.html', extra_vars=extra_vars)
 
     def update(self):
         params = t.request.params
-        topic_id = params['topic_id']
-        topic    = Topic.find(topic_id)
+        topic = Topic.find(params['topic_id'])
+        error = None
 
-        old_index = topic['index']
-        new_index = params['topic_index']
-        old_topic_name = topic['name']
-        new_name  = new_index + '_' + params['topic_display_name']
+        # update topic
+        names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
+        Topic.update_name(topic['id'], names)
 
-        if (old_index != new_index):
-            subtopics = Subtopic.by_topic(topic_id)
-            for subtopic in subtopics:
-                Subtopic.update_subtopic_topic_index(subtopic, new_index)
+        try:
+            Topic.update_position(topic['id'], params['topic_position'])
+        except IntegrityError as e:
+            error = _('Position is already taken')
 
-        session = model.Session
-        matched_tag = session.query(Tag).filter(Tag.id == topic['id']).first()
-        matched_tag.name = new_name
-        model.Session.commit()
+        if error:
+            h.flash_error(error)
+        else:
+            h.flash_success(_('Topic updated successfully'))
 
-        reindex_packages_with_changed_topic(old_topic_name)
+        # reindex_packages_with_changed_topic(old_topic_name)
 
-        t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
+        t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='edit', id=topic['id'])
 
     def destroy(self):
         context = { 'user': t.c.user }
 
         topic_id = t.request.params['id']
-        topic    = Topic.find(topic_id)
+        topic = TopicDecorator(Topic.find(topic_id))
 
-        old_topic_name = topic['name']
+        #old_topic_name = topic['name']
 
         # destroy topic and related subtopics
-        for subtopic in Subtopic.by_topic(topic['id']):
+        for subtopic in Subtopic.by_topic(topic.id):
             Subtopic.destroy(context, subtopic['id'])
 
-        Topic.destroy(context, topic['id'])
+        Topic.destroy(context, topic.id)
 
-        destroyed_index = topic['index']
+        destroyed_position = topic.position
 
-        # update indexes of following topics and subtopics
+        # TODO: destroy term translations (no API available)
+
+        # update indexes of following topics
         for topic in Topic.all():
-            if topic['index'] > destroyed_index:
-                topic_subtopics = Subtopic.by_topic(topic['id'])
+            topic = TopicDecorator(topic)
 
-                # decrement topic index
-                new_topic_index = AlphabeticIndex.previous_letter(topic['index'])
-                Topic.update_topic_index(topic, new_topic_index)
+            if int(topic.position) > int(destroyed_position):
+                new_topic_position = int(topic.position) - 1
+                Topic.update_position(topic.id, new_topic_position)
 
-                # decrement subtopics topic index
-                for subtopic in topic_subtopics:
-                    Subtopic.update_subtopic_topic_index(subtopic, new_topic_index)
-
-        reindex_packages_with_changed_topic(old_topic_name)
+        # TODO: reindex_packages_with_changed_topic(old_topic_name)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')

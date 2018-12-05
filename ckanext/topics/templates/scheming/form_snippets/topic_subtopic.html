@@ -1,0 +1,35 @@
+{% resource 'topics/topic_subtopic_filter.js' %}
+
+<div id="topic-subtopic-selectors" data-module="topic_subtopic_filter">
+
+  <!-- Custom topic vocabulary -->
+  <div class="form-group control-small">
+    <label class="control-label" for="field-custom_topic">{{ _('Topic') }}</label>
+    <div class="controls">
+      <select id="field-custom_topic" name="custom_topic" style="min-width: 50%">
+        <option></option>
+        {% for topic in h.custom_topics()  %}
+          <option value="{{ topic.id }}" js-topic-id="{{ topic.id }}" {% if topic.name in data.get('custom_topic', []) %}selected="selected"{% endif %}>
+            {{ topic.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- Custom subtopic vocabulary -->
+  <div class="form-group control-small">
+    <label class="control-label" for="field-custom_subtopic">{{ _('Subtopic') }}</label>
+    <div class="controls">
+      <select id="field-custom_subtopic" name="custom_subtopic" style="min-width: 50%">
+        <option></option>
+        {% for subtopic in h.custom_subtopics()  %}
+          <option value="{{ subtopic.id }}" js-parent-topic-id="{{ subtopic.parent_id }}" {% if subtopic.name in data.get('custom_subtopic', []) %}selected="selected"{% endif %}>
+            {{ subtopic.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,19 @@
+{
+  "scheming_presets_version": 1,
+  "about": "scheming presets for ckanext-topics",
+  "about_url": "https://github.com/PopulateTools/ckanext-topics",
+  "presets": [
+    {
+      "preset_name": "custom_topic",
+      "values": {
+        "form_snippet": "topic_subtopic.html"
+      }
+    },
+    {
+      "preset_name": "custom_subtopic",
+      "values": {
+        "form_snippet": "blank.html"
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 import ckan.plugins.toolkit as t
 import ckan.model as model
 import ckan.lib.base as base
+import ckan.lib.helpers as h
 
 from ckan.model import Tag
 from ckan.common import _
@@ -11,6 +12,9 @@ from ckanext.topics.lib.topic import Topic
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.tools import *
 from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
+from ckanext.topics.lib.subtopic_decorator import SubtopicDecorator
+
+from sqlalchemy.exc import IntegrityError
 
 
 class SubtopicController(t.BaseController):
@@ -26,36 +30,47 @@ class SubtopicController(t.BaseController):
         topic_id = t.request.params['topic_id']
         topic    = Topic.find(topic_id)
 
-        extra_vars = {
-            'subtopic': { 'topic_id': topic_id },
-            'controller_action': 'create'
-        }
+        subtopic = SubtopicDecorator({ 'parent_id': topic['id'], 'position': Subtopic.get_free_position(topic_id) })
+        extra_vars = { 'subtopic': subtopic, 'controller_action': 'create' }
 
         return t.render('subtopic/edit.html', extra_vars=extra_vars)
 
     def create(self):
         context = { 'user': t.c.user }
-
         params = t.request.params
-        topic_id = params['subtopic_topic_id']
-        display_name = params['subtopic_display_name']
+        error = None
 
-        if (Subtopic.topic_subtopics_count(topic_id) >= AlphabeticIndex.max_items()):
-            t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
-
+        topic_id = params['subtopic_parent_id']
         topic = Topic.find(topic_id)
 
-        subtopic_index = Subtopic.get_new_subtopic_index(topic_id)
+        # create tag
+        try:
+            tag_attributes = {
+                'name': params['subtopic_position'] + '_' + topic['id'],
+                'vocabulary_id': Subtopic.vocabulary_id()
+            }
+            tag = t.get_action('topic_create')(context, tag_attributes)
 
-        name = topic['index'] + '_' + subtopic_index + '_' + display_name
+            # create name translations
+            for locale in available_locales():
+                t.get_action('term_translation_update')({}, {
+                    'term': tag['id'],
+                    'term_translation': params['subtopic_name_' + locale],
+                    'lang_code': locale
+                })
+        except IntegrityError as e:
+            error = _('Position is already taken')
 
-        result = t.get_action('tag_create')(context, { 'name': name, 'vocabulary_id': Subtopic.vocabulary_id() })
+        if error:
+            h.flash_error(error)
+        else:
+            h.flash_success(_('Subtopic created successfully'))
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
 
     def edit(self):
         subtopic_id = t.request.params['id']
-        subtopic = Subtopic.find(subtopic_id)
+        subtopic = SubtopicDecorator(Subtopic.find(subtopic_id))
 
         extra_vars = {
             'subtopic': subtopic,
@@ -66,45 +81,55 @@ class SubtopicController(t.BaseController):
 
     def update(self):
         params = t.request.params
+        error = None
 
-        topic_id = params['subtopic_topic_id']
+        topic_id = params['subtopic_parent_id']
         topic = Topic.find(topic_id)
 
         subtopic_id = params['subtopic_id']
-        subtopic = Subtopic.find(subtopic_id)
+        subtopic = SubtopicDecorator(Subtopic.find(subtopic_id))
 
-        old_name = subtopic['name']
-        new_index = params['subtopic_index']
-        new_name = topic['index'] + '_' + new_index + '_' + params['subtopic_display_name']
+        # update record
+        for locale in available_locales():
+            t.get_action('term_translation_update')({}, {
+                'term': subtopic.id,
+                'term_translation': params['subtopic_name_' + locale],
+                'lang_code': locale
+            })
+        try:
+            Subtopic.update_position(subtopic.id, subtopic.parent_id, params['subtopic_position'])
+        except IntegrityError as e:
+            error = _('Position is already taken')
 
-        session = model.Session
-        matched_tag = session.query(Tag).filter(Tag.name == subtopic['name']).first()
-        matched_tag.name = new_name
-        model.Session.commit()
+        if error:
+            h.flash_error(error)
+        else:
+            h.flash_success(_('Subtopic updated successfully'))
 
-        reindex_packages_with_changed_topic(old_name)
+        #reindex_packages_with_changed_topic(old_name)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
 
     def destroy(self):
         context = { 'user': t.c.user }
-
         params = t.request.params
 
         subtopic_id = t.request.params['id']
-        subtopic    = Subtopic.find(subtopic_id)
+        subtopic    = SubtopicDecorator(Subtopic.find(subtopic_id))
 
-        old_name = subtopic['name']
+        #old_name = subtopic['name']
 
         Subtopic.destroy(context, subtopic_id)
 
-        # Update indexes of following subtopics
-        destroyed_index = subtopic['index']
-        for subtopic in Subtopic.all():
-            if subtopic['index'] > destroyed_index:
-                new_subtopic_index = AlphabeticIndex.previous_letter(subtopic['index'])
-                Subtopic.update_subtopic_index(subtopic, new_subtopic_index)
+        # update positions of following subtopics
+        destroyed_position = int(subtopic.position)
+        for subtopic in Subtopic.by_topic(subtopic.parent_id):
+            subtopic = SubtopicDecorator(subtopic)
+            subtopic_pos = int(subtopic.position)
+            if subtopic_pos > destroyed_position:
+                new_position = subtopic_pos - 1
+                Subtopic.update_position(subtopic.id, subtopic.parent_id, new_position)
 
-        reindex_packages_with_changed_topic(old_name)
+        #reindex_packages_with_changed_topic(old_name)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')

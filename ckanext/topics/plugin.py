@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import ckan.plugins as plugins
-import ckan.plugins.toolkit as toolkit
+import logging
+log = logging.getLogger(__name__)
+
+import ckan.plugins as p
+import ckan.plugins.toolkit as t
 import ckan.model as model
 
 import dateutil.parser as date_parser
@@ -9,8 +12,21 @@ import dateutil.parser as date_parser
 from ckan.common import c
 from ckanext.topics.lib.topic import Topic
 from ckanext.topics.lib.subtopic import Subtopic
+from ckanext.topics.lib.topic_decorator import TopicDecorator
+from ckanext.topics.lib.topic_decorator import SubtopicDecorator
 from ckanext.topics.lib.tools import user_is_admin
+from ckanext.topics.lib.tools import available_locales
+from ckanext.topics.lib.converters import convert_to_custom_topic_tags
 from collections import OrderedDict
+
+import ckan as ckan
+import ckan.logic as logic
+import ckan.lib.dictization.model_save as model_save
+import ckan.lib.dictization.model_dictize as model_dictize
+import ckan.lib.helpers as h
+
+_validate = ckan.lib.navl.dictization_functions.validate
+_check_access = logic.check_access
 
 
 def current_user_is_admin():
@@ -18,31 +34,97 @@ def current_user_is_admin():
 
 
 def custom_topics():
-    return Topic.all()
+    collection = []
+    for topic in Topic.all():
+        collection.append(TopicDecorator(topic))
+
+    return collection
 
 
 def custom_subtopics():
-    return Subtopic.all()
+    collection = []
+    for subtopic in Subtopic.all():
+        collection.append(SubtopicDecorator(subtopic))
+
+    return collection
 
 
-def topic_display_name(topic_name):
-    # same behavior for subtopic
-    return Topic.topic_display_name(topic_name)
+def topic_subtopics(topic_id):
+    topic_subtopics = []
+    for subtopic in Subtopic.by_topic(topic_id):
+        topic_subtopics.append(SubtopicDecorator(subtopic))
+
+    return topic_subtopics
 
 
-def get_topic_name(topic_id):
-    topic = Topic.find(topic_id)
-    if (topic != None):
-        return topic['display_name']
+def topic_create(context, data_dict):
+    model = context['model']
+
+    _check_access('tag_create', context, data_dict)
+
+    schema = context.get('schema') or \
+        ckan.logic.schema.default_create_tag_schema()
+    data, errors = _validate(data_dict, schema, context)
+    # if errors:
+    #     raise ValidationError(errors)
+
+    tag = model_save.tag_dict_save(data_dict, context)
+
+    if not context.get('defer_commit'):
+        model.repo.commit()
+
+    log.debug("Created tag '%s' " % tag)
+
+    return model_dictize.tag_dictize(tag, context)
 
 
-class TopicsPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
+def extract_term_translation(term_translations, locale):
+    for term_translation in term_translations:
+        if locale == term_translation['lang_code']:
+            return term_translation['term_translation']
 
-    plugins.implements(plugins.IDatasetForm)
-    plugins.implements(plugins.IConfigurer)
-    plugins.implements(plugins.ITemplateHelpers)
-    plugins.implements(plugins.IFacets, inherit=True)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    # fallback
+    if len(term_translations) > 0:
+        return term_translations[0]['term_translation']
+
+
+def subtopic_parent_name(subtopic_decorator):
+    topic_id = subtopic_decorator.parent_id
+    topic = TopicDecorator(Topic.find(topic_id))
+    return topic.name
+
+
+# Accepts facet name as argument, if it corresponds with a topic or subtopic returns
+# its name. Otherwise returns None
+def topic_facet_name(tag_id):
+    topic = Topic.find(tag_id)
+
+    if topic:
+        return TopicDecorator(topic).name
+
+    subtopic = Subtopic.find(tag_id)
+
+    if subtopic:
+        return SubtopicDecorator(subtopic).name
+
+    return None
+
+
+class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):
+
+    p.implements(p.IDatasetForm)
+    p.implements(p.IConfigurer)
+    p.implements(p.ITemplateHelpers)
+    p.implements(p.IFacets, inherit=True)
+    p.implements(p.IRoutes, inherit=True)
+    p.implements(p.IActions)
+    p.implements(p.IValidators)
+
+    ## IActions
+    def get_actions(self):
+        return {
+            'topic_create': topic_create
+        }
 
     ## IDatasetForm
 
@@ -64,17 +146,17 @@ class TopicsPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
-        schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
+        schema['tags']['__extras'].append(t.get_converter('free_tags_only'))
 
         # Add our custom country_code metadata field to the schema.
         schema.update({
             'custom_topic': [
-                toolkit.get_converter('convert_from_tags')('custom_topics'),
-                toolkit.get_validator('ignore_missing')
+                t.get_converter('convert_from_tags')('custom_topics'),
+                t.get_validator('ignore_missing')
             ],
             'custom_subtopic': [
-                toolkit.get_converter('convert_from_tags')('custom_subtopics'),
-                toolkit.get_validator('ignore_missing')
+                t.get_converter('convert_from_tags')('custom_subtopics'),
+                t.get_validator('ignore_missing')
             ]
         })
 
@@ -93,25 +175,28 @@ class TopicsPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
     # IConfigurer
 
     def update_config(self, config_):
-        toolkit.add_template_directory(config_, 'templates')
-        toolkit.add_resource('fanstatic', 'topics')
+        t.add_template_directory(config_, 'templates')
+        t.add_resource('fanstatic', 'topics')
 
     ## ITemplateHelpers
 
     def get_helpers(self):
         return {
-            'get_topic_name': get_topic_name,
             'custom_topics': custom_topics,
             'custom_subtopics': custom_subtopics,
-            'topic_display_name': topic_display_name,
-            'current_user_is_admin': current_user_is_admin
+            'topic_subtopics': topic_subtopics,
+            'topic_facet_name': topic_facet_name,
+            'current_user_is_admin': current_user_is_admin,
+            'extract_term_translation': extract_term_translation,
+            'subtopic_parent_name': subtopic_parent_name,
+            'available_locales': available_locales
         }
 
     ## IFacets
 
     def dataset_facets(self, facets_dict, package_type):
-        facets_dict['vocab_custom_topics'] = toolkit._('Topics')
-        facets_dict['vocab_custom_subtopics'] = toolkit._('Subtopics')
+        facets_dict['vocab_custom_topics'] = t._('Topics')
+        facets_dict['vocab_custom_subtopics'] = t._('Subtopics')
 
         return facets_dict
 
@@ -138,17 +223,24 @@ class TopicsPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         return map
 
+    ## IValidators
+
+    def get_validators(self):
+        return {
+            'convert_to_custom_topic_tags': convert_to_custom_topic_tags
+        }
+
     ## Others
 
     def _modify_package_schema(self, schema):
         schema.update({
             'custom_topic': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_tags')('custom_topics')
+                t.get_validator('ignore_missing'),
+                t.get_converter('convert_to_tags')('custom_topics')
             ],
             'custom_subtopic': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_tags')('custom_subtopics')
+                t.get_validator('ignore_missing'),
+                t.get_converter('convert_to_tags')('custom_subtopics')
             ]
         })
         return schema

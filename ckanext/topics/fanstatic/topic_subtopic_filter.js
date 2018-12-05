@@ -15,8 +15,7 @@ ckan.module('topic_subtopic_filter', function ($) {
 
       $('#field-custom_subtopic').select2({
         matcher: function(term, text, option) {
-          var optionTopicIndex = option.val().split('_')[0];
-          return optionTopicIndex === getCurrentTopicIndex();
+          return option.attr('js-parent-topic-id') === selectedTopicId();
         },
         placeholder: ' - ',
         allowClear: true,
@@ -31,8 +30,7 @@ ckan.module('topic_subtopic_filter', function ($) {
   };
 });
 
-function getCurrentTopicIndex() {
+function selectedTopicId() {
   var topicSelector = $('#field-custom_topic');
-  var selectedTopicIndex = topicSelector.find(':selected').val().split('_')[0];
-  return selectedTopicIndex;
+  return topicSelector.find(':selected').attr('js-topic-id');
 }

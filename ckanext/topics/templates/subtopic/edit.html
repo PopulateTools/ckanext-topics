@@ -2,41 +2,46 @@
 
 {% block breadcrumb_content %}
   <li>{% link_for _('Temas'), controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
-  <li><a href="{{ h.url_for('topic_edit', id=subtopic['topic_id']) }}">{{ h.get_topic_name(subtopic['topic_id']) }}</a></li>
-  <li class="active">{{ subtopic['display_name'] }}</li>
+  <li><a href="{{ h.url_for('topic_edit', id=subtopic.parent_id) }}">{{ h.subtopic_parent_name(subtopic) }}</a></li>
+  <li class="active">
+      {% if subtopic.id %}{{ subtopic.name }}{% else %}{{ _('New') }}{% endif %}
+    </li>
 {% endblock %}
 
 {% block primary %}
 <div class="primary col-sm-12 col-xs-12">
   <form action="{{ controller_action }}">
 
-    <div class="form-group control-full">
-      <label class="control-label" for="subtopic_id">{{ _('ID') }}</label>
-      <div class="controls ">
-        <input class="form-control" type="text" name="subtopic_id" value="{{ subtopic['id'] }}" readonly>
+    {% if subtopic.id %}
+      <input type="hidden" name="subtopic_id" value="{{ subtopic.id }}">
+    {% endif %}
+
+    <input type="hidden" name="subtopic_parent_id" value="{{ subtopic.parent_id }}">
+
+    {% for locale in h.available_locales() %}
+      <div class="form-group control-full">
+        <label class="control-label" for="subtopic_name_{{ locale }}">{{ _('Name') }} ({{ locale | upper }})</label>
+        <div class="controls ">
+          {% set subtopic_name = h.extract_term_translation(subtopic.name_term_translations, locale) %}
+          <input class="form-control" type="text" name="subtopic_name_{{ locale }}" maxlength="64" value="{{ subtopic_name if subtopic_name }}">
+        </div>
       </div>
-    </div>
-
-    <input type="hidden" name="subtopic_topic_id" value="{{ subtopic['topic_id'] }}">
-    <input type="hidden" name="subtopic_name" value="{{ subtopic['name'] }}">
+    {% endfor %}
 
     <div class="form-group control-full">
-      <label class="control-label" for="subtopic_display_name">{{ _('Nombre') }}</label>
+      <label class="control-label" for="subtopic_index">{{ _('Position') }}</label>
       <div class="controls ">
-        <input class="form-control" type="text" name="subtopic_display_name" value="{{ subtopic['display_name'] }}">
-      </div>
-    </div>
-
-    <div class="form-group control-full">
-      <label class="control-label" for="subtopic_index">{{ _('Índice') }}</label>
-      <div class="controls ">
-        <input class="form-control" type="text" name="subtopic_index" value="{{ subtopic['index'] }}">
+        <input class="form-control" type="number" min="0" name="subtopic_position" value="{{ subtopic.position }}">
       </div>
     </div>
 
     <div class="form-actions">
-      <a class="btn btn-danger pull-left" href="{{ h.url_for('subtopic_destroy', id=subtopic['id']) }}" data-module="confirm-action" data-module-content="{{ _('¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de los datasets asociados.') }}">{{ _('Borrar') }}</a>
-      <button class="btn btn-primary" name="save" type="submit">{{ _('Actualizar') }}</button>
+      {% if subtopic.id %}
+          <a class="btn btn-danger pull-left" href="{{ h.url_for('subtopic_destroy', id=subtopic.id) }}" data-module="confirm-action" data-module-content="{{ _('¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de los datasets asociados.') }}">{{ _('Borrar') }}</a>
+          <button class="btn btn-primary" name="save" type="submit">{{ _('Update') }}</button>
+      {% else %}
+          <button class="btn btn-primary" name="save" type="submit">{{ _('Create') }}</button>
+      {% endif %}
     </div>
 
   </form>

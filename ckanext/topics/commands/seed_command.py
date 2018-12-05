@@ -1,4 +1,7 @@
+# encoding: utf-8
+
 import sys
+import simplejson as json
 
 import ckan.logic as logic
 import ckan.plugins.toolkit as t
@@ -55,15 +58,63 @@ class SeedCommand(CkanCommand):
     def create_sample_topics(self):
         print "\n[SEED] Creating sample topics..."
 
-        sample_topics = [
-            { 'name': 'a_Economy', 'subtopics':  ['a_a_Microeconomy', 'a_b_Macroeconomy'] },
-            { 'name': 'b_Ecology', 'subtopics':  ['b_a_Forests', 'b_b_Oceans'] }
-        ]
-        context = {}
+        subtopics_vocabulary = Subtopic.vocabulary_id()
 
-        for topic_data in sample_topics:
-            print logic.get_action('tag_create')(context, { 'name': topic_data['name'], 'vocabulary_id': Topic.vocabulary_id() })
-            for subtopic in topic_data['subtopics']:
-                print logic.get_action('tag_create')(context, { 'name': subtopic, 'vocabulary_id': Subtopic.vocabulary_id() })
+        sample_topics = [
+            {
+                'position': '0',
+                'name': { 'es': u'Economía', 'en': u'Economy', 'eu': u'Ekonomia' }
+            },
+            {
+                'position': '1',
+                'name': { 'es': u'Ecología', 'en': u'Ecology', 'eu': u'Ekologia' }
+            }
+        ]
+
+        for topic in sample_topics:
+            tag_dict = { 'name': topic['position'], 'vocabulary_id': Topic.vocabulary_id() }
+            result = logic.get_action('topic_create')({}, tag_dict)
+            for lang_code, name in topic['name'].iteritems():
+                logic.get_action('term_translation_update')({}, {
+                    'term': result['id'],
+                    'term_translation': name,
+                    'lang_code': lang_code
+                })
+
+        economy_topic_id = logic.get_action('tag_show')({}, { 'id': '0', 'vocabulary_id': Topic.vocabulary_id() })['id']
+        ecology_topic_id = logic.get_action('tag_show')({}, { 'id': '1', 'vocabulary_id': Topic.vocabulary_id() })['id']
+
+        sample_subtopics = [
+            {
+                'position': '0',
+                'parent_id': economy_topic_id,
+                'name': { 'es': u'Microeconomía', 'en': u'Microeconomy', 'eu': u'Mikroekonomia' }
+            },
+            {
+                'position': '1',
+                'parent_id': economy_topic_id,
+                'name': { 'es': u'Macroeconomía', 'en': u'Macroeconomy', 'eu': u'Macroeconomy' }
+            },
+            {
+                'position': '0',
+                'parent_id': ecology_topic_id,
+                'name': { 'es': u'Bosques', 'en': u'Forests', 'eu': u'Basoak' }
+            },
+            {
+                'position': '1',
+                'parent_id': ecology_topic_id,
+                'name': { 'es': u'Océanos', 'en': u'Oceans', 'eu': u'Ozeanoak' }
+            }
+        ]
+
+        for subtopic in sample_subtopics:
+            subtopic_dict = { 'name': subtopic['position'] + '_' + subtopic['parent_id'], 'vocabulary_id': Subtopic.vocabulary_id() }
+            result = logic.get_action('topic_create')({}, subtopic_dict)
+            for lang_code, name in subtopic['name'].iteritems():
+                logic.get_action('term_translation_update')({}, {
+                    'term': result['id'],
+                    'term_translation': name,
+                    'lang_code': lang_code
+                })
 
         print "\n[SEED] Sample topics created"

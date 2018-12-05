@@ -7,6 +7,7 @@ from ckan.model import Tag
 
 from ckanext.topics.lib.topic import Topic
 from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
+from ckanext.topics.lib.subtopic_decorator import SubtopicDecorator
 
 
 class Subtopic(object):
@@ -43,15 +44,16 @@ class Subtopic(object):
             return []
 
     @classmethod
-    def by_topic(cls, topic_id_or_name):
-        topic_subtopics = []
-        topic = Topic.find(topic_id_or_name)
+    def by_topic(cls, topic_id):
+        topic = Topic.find(topic_id)
+        subtopics = []
 
-        for subtopic in cls.all():
-            if (subtopic['topic_id'] == topic['id']):
-                topic_subtopics.append(subtopic)
+        for raw_subtopic in cls.all():
+            subtopic = SubtopicDecorator(raw_subtopic)
+            if (subtopic.parent_id == topic['id']):
+                subtopics.append(raw_subtopic)
 
-        return topic_subtopics
+        return subtopics
 
     @classmethod
     def destroy(cls, context, subtopic_id_or_name):
@@ -59,18 +61,25 @@ class Subtopic(object):
 
         # TODO: reindex facets and datasets with this subtopic
 
-    @classmethod
-    def update_subtopic_index(cls, subtopic, new_index):
-        topic = Topic.find(subtopic['topic_id'])
+    # @classmethod
+    # def update_subtopic_index(cls, subtopic, new_index):
+    #     topic = Topic.find(subtopic['topic_id'])
 
-        new_name = topic['index'] + '_' + new_index + '_' + subtopic['display_name']
+    #     new_name = topic['index'] + '_' + new_index + '_' + subtopic['display_name']
 
-        session = model.Session
-        matched_tag = session.query(Tag).filter(Tag.name == subtopic['name']).first()
-        matched_tag.name = new_name
-        model.Session.commit()
+    #     session = model.Session
+    #     matched_tag = session.query(Tag).filter(Tag.name == subtopic['name']).first()
+    #     matched_tag.name = new_name
+    #     model.Session.commit()
 
         # TODO: reindex facets and datasets with this subtopic
+
+    @classmethod
+    def update_position(cls, subtopic_id, parent_id, new_position):
+        session = model.Session
+        matched_tag = session.query(Tag).filter(Tag.id == subtopic_id).first()
+        matched_tag.name = str(new_position) + '_' + parent_id
+        model.Session.commit()
 
     @classmethod
     def update_subtopic_topic_index(cls, subtopic, new_topic_index):
@@ -84,6 +93,20 @@ class Subtopic(object):
         model.Session.commit()
 
         # TODO: reindex facets and datasets with this subtopic
+
+    @classmethod
+    def get_free_position(cls, topic_id):
+        subtopics = cls.by_topic(topic_id)
+
+        if (len(subtopics) == 0):
+            return '0'
+
+        last_free_position = 0
+        for subtopic in subtopics:
+            subtopic_position = int(subtopic['name'].split('_')[0])
+            last_free_position = max(last_free_position, subtopic_position)
+
+        return str(last_free_position + 1)
 
     @classmethod
     def vocabulary_id(cls):
@@ -112,19 +135,19 @@ class Subtopic(object):
         splitted_name = subtopic_name.split('_')
         return splitted_name[len(splitted_name) - 1]
 
-    @classmethod
-    def get_new_subtopic_index(cls, topic_id_or_name):
-        topic_subtopics = cls.by_topic(topic_id_or_name)
+    # @classmethod
+    # def get_new_subtopic_index(cls, topic_id_or_name):
+    #     topic_subtopics = cls.by_topic(topic_id_or_name)
 
-        if (len(topic_subtopics) == 0):
-            return AlphabeticIndex.first_letter()
+    #     if (len(topic_subtopics) == 0):
+    #         return AlphabeticIndex.first_letter()
 
-        biggest_letter_idx = ' ' # All lowercase letters are 'bigger' than blankspace
+    #     biggest_letter_idx = ' ' # All lowercase letters are 'bigger' than blankspace
 
-        for subtopic in topic_subtopics:
-            biggest_letter_idx = max(biggest_letter_idx, subtopic['index'])
+    #     for subtopic in topic_subtopics:
+    #         biggest_letter_idx = max(biggest_letter_idx, subtopic['index'])
 
-        return AlphabeticIndex.next_letter(biggest_letter_idx)
+    #     return AlphabeticIndex.next_letter(biggest_letter_idx)
 
     @classmethod
     def topic_subtopics_count(cls, topic_id_or_name):

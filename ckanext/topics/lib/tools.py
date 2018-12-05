@@ -5,7 +5,7 @@ import ckan.lib.search as search
 import ckan.model as model
 
 from ckan.common import c
-
+from ckan.common import config
 
 def reindex_packages_with_changed_topic(topic_or_subtopic_text):
 
@@ -37,3 +37,6 @@ def user_is_admin(username):
         return False
 
     return user['sysadmin']
+
+def available_locales():
+    return t.aslist(config.get('ckan.locales_offered', ['es', 'en', 'eu']))

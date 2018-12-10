@@ -25,7 +25,7 @@ class SubtopicController(t.BaseController):
 
     def new(self):
         topic_id = t.request.params['topic_id']
-        topic    = Topic.find(topic_id)
+        topic = Topic.find(topic_id)
 
         subtopic = SubtopicDecorator({ 'parent_id': topic['id'], 'position': Subtopic.get_free_position(topic_id) })
         extra_vars = { 'subtopic': subtopic, 'controller_action': 'create' }
@@ -46,16 +46,7 @@ class SubtopicController(t.BaseController):
                 context,
                 Subtopic.build_tag_dict(params['subtopic_position'], topic['id'])
             )
-
-            # create name translations
-            for locale in available_locales():
-                term_translation = params['subtopic_name_' + locale]
-                if term_translation:
-                    t.get_action('term_translation_update')({}, {
-                        'term': tag['id'],
-                        'term_translation': term_translation,
-                        'lang_code': locale
-                    })
+            self.update_term_translations(params, tag['id'])
         except TopicPositionDuplicated as e:
             error = _('Position is already taken')
 
@@ -88,15 +79,8 @@ class SubtopicController(t.BaseController):
         subtopic = SubtopicDecorator(Subtopic.find(subtopic_id))
         subtopic_old_name = subtopic.tag_name
 
-        # update record
-        for locale in available_locales():
-            term_translation = params['subtopic_name_' + locale]
-            if term_translation:
-                t.get_action('term_translation_update')({}, {
-                    'term': subtopic.id,
-                    'term_translation': params['subtopic_name_' + locale],
-                    'lang_code': locale
-                })
+        self.update_term_translations(params, subtopic.id)
+
         try:
             Subtopic.update_position(subtopic.id, subtopic.parent_id, params['subtopic_position'])
             reindex_packages_with_changed_topic(subtopic_old_name)
@@ -131,3 +115,13 @@ class SubtopicController(t.BaseController):
                 Subtopic.update_position(subtopic.id, subtopic.parent_id, new_position)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
+
+    def update_term_translations(self, params, subtopic_id):
+        for locale in available_locales():
+            term_translation = params['subtopic_name_' + locale]
+            if term_translation:
+                t.get_action('term_translation_update')({}, {
+                    'term': subtopic_id,
+                    'term_translation': params['subtopic_name_' + locale],
+                    'lang_code': locale
+                })

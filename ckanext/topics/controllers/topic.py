@@ -54,8 +54,7 @@ class TopicController(t.BaseController):
         # create topic
         try:
             tag = t.get_action('topic_create')(context, Topic.build_tag_dict(position))
-            names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
-            Topic.update_name(tag['id'], names)
+            Topic.update_name(tag['id'], self.build_names_from_params(params))
         except TopicPositionDuplicated as e:
             error = _('Position is already taken')
 
@@ -82,8 +81,7 @@ class TopicController(t.BaseController):
         error = None
 
         # update topic
-        names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
-        Topic.update_name(topic.id, names)
+        Topic.update_name(topic.id, self.build_names_from_params(params))
 
         try:
             Topic.update_position(topic.id, params['topic_position'])
@@ -124,3 +122,10 @@ class TopicController(t.BaseController):
                 Topic.update_position(topic.id, new_topic_position)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
+
+    def build_names_from_params(self, params):
+        names = {}
+        for locale in available_locales():
+            names[locale] = params['topic_name_' + locale]
+
+        return names

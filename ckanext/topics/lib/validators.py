@@ -11,9 +11,6 @@ def topic_tag_in_vocabulary_validator(value, context):
     session = context['session']
     vocabulary = context.get('vocabulary')
     if vocabulary:
-        log.info("Vocabulary: " + str(vocabulary))
-        #log.info("Tag name: " + str(unicode(value)))
-
         query = session.query(model.Tag)\
             .filter(model.Tag.vocabulary_id==vocabulary.id)\
             .filter(model.Tag.name==value)\

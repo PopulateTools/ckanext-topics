@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 import sys
-import simplejson as json
 
 import ckan.logic as logic
 import ckan.plugins.toolkit as t

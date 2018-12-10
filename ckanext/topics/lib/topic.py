@@ -7,7 +7,6 @@ import ckan.model as model
 import ckan.lib.helpers as h
 
 from ckan.model import Tag
-from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
 from ckanext.topics.lib.tools import *
 
 

@@ -11,10 +11,7 @@ from ckan.common import _
 from ckanext.topics.lib.topic import Topic, TopicPositionDuplicated
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.tools import *
-from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
 from ckanext.topics.lib.subtopic_decorator import SubtopicDecorator
-
-from sqlalchemy.exc import IntegrityError
 
 
 class SubtopicController(t.BaseController):
@@ -103,7 +100,7 @@ class SubtopicController(t.BaseController):
         try:
             Subtopic.update_position(subtopic.id, subtopic.parent_id, params['subtopic_position'])
             reindex_packages_with_changed_topic(subtopic_old_name)
-        except IntegrityError as e:
+        except TopicPositionDuplicated as e:
             error = _('Position is already taken')
 
         if error:

@@ -8,7 +8,6 @@ import ckan.model as model
 from ckan.model import Tag
 
 from ckanext.topics.lib.topic import Topic
-from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
 
 
 class Subtopic(object):

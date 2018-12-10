@@ -12,9 +12,6 @@ from ckanext.topics.lib.topic import Topic, TopicPositionDuplicated
 from ckanext.topics.lib.topic_decorator import TopicDecorator
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.tools import *
-from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
-
-from sqlalchemy.exc import IntegrityError
 
 
 class TopicController(t.BaseController):
@@ -57,7 +54,7 @@ class TopicController(t.BaseController):
             tag = t.get_action('topic_create')(context, Topic.build_tag_dict(position))
             names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
             Topic.update_name(tag['id'], names)
-        except IntegrityError as e:
+        except TopicPositionDuplicated as e:
             error = _('Position is already taken')
 
         if error:

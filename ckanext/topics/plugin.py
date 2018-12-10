@@ -57,6 +57,32 @@ def topic_subtopics(topic_id):
     return topic_subtopics
 
 
+# Tags arrive with the id replaced per the corresponding term translation
+def topic_name_from_tags(tags):
+    return topic_id_from_tags(tags)
+
+
+# Tags arrive with the id replaced per the corresponding term translation
+def subtopic_name_from_tags(tags):
+    return subtopic_id_from_tags(tags)
+
+
+def topic_id_from_tags(tags):
+    for tag in tags:
+        if (tag['vocabulary_id'] == Topic.vocabulary_id()):
+            return tag['id']
+
+    return None
+
+
+def subtopic_id_from_tags(tags):
+    for tag in tags:
+        if (tag['vocabulary_id'] == Subtopic.vocabulary_id()):
+            return tag['id']
+
+    return None
+
+
 def topic_create(context, data_dict):
     model = context['model']
 
@@ -189,7 +215,11 @@ class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):
             'current_user_is_admin': current_user_is_admin,
             'extract_term_translation': extract_term_translation,
             'subtopic_parent_name': subtopic_parent_name,
-            'available_locales': available_locales
+            'available_locales': available_locales,
+            'topic_id_from_tags': topic_id_from_tags,
+            'subtopic_id_from_tags': subtopic_id_from_tags,
+            'topic_name_from_tags': topic_name_from_tags,
+            'subtopic_name_from_tags': subtopic_name_from_tags
         }
 
     ## IFacets

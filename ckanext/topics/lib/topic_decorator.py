@@ -3,6 +3,7 @@
 import ckan.plugins.toolkit as t
 import ckan.lib.helpers as h
 
+from ckanext.topics.lib.topic import Topic
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.subtopic_decorator import SubtopicDecorator
 
@@ -32,7 +33,7 @@ class TopicDecorator(object):
         self.subtopics = []
 
         if 'name' in topic_dict:
-            self.position = topic_dict['name']
+            self.position = Topic.parse_tag_dict(topic_dict)['name']
         if 'position' in topic_dict:
             self.position = topic_dict['position']
 

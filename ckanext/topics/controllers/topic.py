@@ -54,7 +54,7 @@ class TopicController(t.BaseController):
 
         # create topic
         try:
-            tag = t.get_action('topic_create')(context, { 'name': position, 'vocabulary_id': Topic.vocabulary_id() })
+            tag = t.get_action('topic_create')(context, Topic.build_tag_dict(position))
             names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
             Topic.update_name(tag['id'], names)
         except IntegrityError as e:

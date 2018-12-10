@@ -45,19 +45,20 @@ class SubtopicController(t.BaseController):
 
         # create tag
         try:
-            tag_attributes = {
-                'name': params['subtopic_position'] + '_' + topic['id'],
-                'vocabulary_id': Subtopic.vocabulary_id()
-            }
-            tag = t.get_action('topic_create')(context, tag_attributes)
+            tag = t.get_action('topic_create')(
+                context,
+                Subtopic.build_tag_dict(params['subtopic_position'], topic['id'])
+            )
 
             # create name translations
             for locale in available_locales():
-                t.get_action('term_translation_update')({}, {
-                    'term': tag['id'],
-                    'term_translation': params['subtopic_name_' + locale],
-                    'lang_code': locale
-                })
+                term_translation = params['subtopic_name_' + locale]
+                if term_translation:
+                    t.get_action('term_translation_update')({}, {
+                        'term': tag['id'],
+                        'term_translation': term_translation,
+                        'lang_code': locale
+                    })
         except IntegrityError as e:
             error = _('Position is already taken')
 
@@ -91,11 +92,13 @@ class SubtopicController(t.BaseController):
 
         # update record
         for locale in available_locales():
-            t.get_action('term_translation_update')({}, {
-                'term': subtopic.id,
-                'term_translation': params['subtopic_name_' + locale],
-                'lang_code': locale
-            })
+            term_translation = params['subtopic_name_' + locale]
+            if term_translation:
+                t.get_action('term_translation_update')({}, {
+                    'term': subtopic.id,
+                    'term_translation': params['subtopic_name_' + locale],
+                    'lang_code': locale
+                })
         try:
             Subtopic.update_position(subtopic.id, subtopic.parent_id, params['subtopic_position'])
         except IntegrityError as e:

@@ -3,6 +3,8 @@
 import ckan.plugins.toolkit as t
 import ckan.lib.helpers as h
 
+from ckanext.topics.lib.subtopic import Subtopic
+
 
 class SubtopicDecorator(object):
 
@@ -28,8 +30,9 @@ class SubtopicDecorator(object):
 
         # position and parent_id are stored in the same attribute
         if 'name' in subtopic_dict:
-            self.position = subtopic_dict['name'].split('_')[0]
-            self.parent_id = subtopic_dict['name'].split('_')[1]
+            attrs = Subtopic.parse_tag_dict(subtopic_dict)
+            self.position = attrs['position']
+            self.parent_id = attrs['parent_id']
         else:
             self.position = None
             self.parent_id = None
@@ -38,7 +41,7 @@ class SubtopicDecorator(object):
         if 'parent_id' in subtopic_dict:
             self.parent_id = subtopic_dict['parent_id']
         if 'position' in subtopic_dict:
-            self.position = subtopic_dict['position']
+            self.position = int(subtopic_dict['position'])
 
     def to_s(self):
         return "[SubopicDecorator] id: " + str(self.id) + " name: " + str(self.name) + " parent_id: " + str(self.parent_id) + " position: " + str(self.position)

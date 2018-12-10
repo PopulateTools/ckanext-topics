@@ -6,12 +6,14 @@
     {
       "preset_name": "custom_topic",
       "values": {
+        "display_snippet": "custom_topic.html",
         "form_snippet": "topic_subtopic.html"
       }
     },
     {
       "preset_name": "custom_subtopic",
       "values": {
+        "display_snippet": "custom_subtopic.html",
         "form_snippet": "blank.html"
       }
     }

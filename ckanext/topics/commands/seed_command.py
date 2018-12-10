@@ -62,54 +62,56 @@ class SeedCommand(CkanCommand):
 
         sample_topics = [
             {
-                'position': '0',
+                'position': 0,
                 'name': { 'es': u'Economía', 'en': u'Economy', 'eu': u'Ekonomia' }
             },
             {
-                'position': '1',
+                'position': 1,
                 'name': { 'es': u'Ecología', 'en': u'Ecology', 'eu': u'Ekologia' }
             }
         ]
 
         for topic in sample_topics:
-            tag_dict = { 'name': topic['position'], 'vocabulary_id': Topic.vocabulary_id() }
-            result = logic.get_action('topic_create')({}, tag_dict)
+            result = logic.get_action('topic_create')({}, Topic.build_tag_dict(topic['position']))
             for lang_code, name in topic['name'].iteritems():
-                logic.get_action('term_translation_update')({}, {
-                    'term': result['id'],
-                    'term_translation': name,
-                    'lang_code': lang_code
-                })
+                if name:
+                    logic.get_action('term_translation_update')({}, {
+                        'term': result['id'],
+                        'term_translation': name,
+                        'lang_code': lang_code
+                    })
 
-        economy_topic_id = logic.get_action('tag_show')({}, { 'id': '0', 'vocabulary_id': Topic.vocabulary_id() })['id']
-        ecology_topic_id = logic.get_action('tag_show')({}, { 'id': '1', 'vocabulary_id': Topic.vocabulary_id() })['id']
+        economy_topic_id = logic.get_action('tag_show')({}, { 'id': Topic.build_tag_name(0), 'vocabulary_id': Topic.vocabulary_id() })['id']
+        ecology_topic_id = logic.get_action('tag_show')({}, { 'id': Topic.build_tag_name(1), 'vocabulary_id': Topic.vocabulary_id() })['id']
 
         sample_subtopics = [
             {
-                'position': '0',
+                'position': 0,
                 'parent_id': economy_topic_id,
                 'name': { 'es': u'Microeconomía', 'en': u'Microeconomy', 'eu': u'Mikroekonomia' }
             },
             {
-                'position': '1',
+                'position': 1,
                 'parent_id': economy_topic_id,
                 'name': { 'es': u'Macroeconomía', 'en': u'Macroeconomy', 'eu': u'Macroeconomy' }
             },
             {
-                'position': '0',
+                'position': 0,
                 'parent_id': ecology_topic_id,
                 'name': { 'es': u'Bosques', 'en': u'Forests', 'eu': u'Basoak' }
             },
             {
-                'position': '1',
+                'position': 1,
                 'parent_id': ecology_topic_id,
                 'name': { 'es': u'Océanos', 'en': u'Oceans', 'eu': u'Ozeanoak' }
             }
         ]
 
         for subtopic in sample_subtopics:
-            subtopic_dict = { 'name': subtopic['position'] + '_' + subtopic['parent_id'], 'vocabulary_id': Subtopic.vocabulary_id() }
-            result = logic.get_action('topic_create')({}, subtopic_dict)
+            result = logic.get_action('topic_create')({}, Subtopic.build_tag_dict(
+                subtopic['position'],
+                subtopic['parent_id']
+            ))
             for lang_code, name in subtopic['name'].iteritems():
                 logic.get_action('term_translation_update')({}, {
                     'term': result['id'],

@@ -83,6 +83,20 @@ def subtopic_id_from_tags(tags):
     return None
 
 
+def topic_name_from_facet_item(facet_item):
+    tag = logic.get_action('tag_show')({}, { 'id': facet_item['name'], 'vocabulary_id': Topic.vocabulary_id() })
+    topic = Topic.find(tag['id'])
+
+    return TopicDecorator(topic).name
+
+
+def subtopic_name_from_facet_item(facet_item):
+    tag = logic.get_action('tag_show')({}, { 'id': facet_item['name'], 'vocabulary_id': Subtopic.vocabulary_id() })
+    subtopic = Subtopic.find(tag['id'])
+
+    return SubtopicDecorator(subtopic).name
+
+
 def topic_create(context, data_dict):
     model = context['model']
 
@@ -219,7 +233,9 @@ class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):
             'topic_id_from_tags': topic_id_from_tags,
             'subtopic_id_from_tags': subtopic_id_from_tags,
             'topic_name_from_tags': topic_name_from_tags,
-            'subtopic_name_from_tags': subtopic_name_from_tags
+            'subtopic_name_from_tags': subtopic_name_from_tags,
+            'topic_name_from_facet_item': topic_name_from_facet_item,
+            'subtopic_name_from_facet_item': subtopic_name_from_facet_item
         }
 
     ## IFacets

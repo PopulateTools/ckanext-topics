@@ -137,17 +137,15 @@ def subtopic_parent_name(subtopic_decorator):
 # Accepts facet name as argument, if it corresponds with a topic or subtopic returns
 # its name. Otherwise returns None
 def topic_facet_name(tag_id):
-    topic = Topic.find(tag_id)
-
-    if topic:
+    try:
+        topic = Topic.find(tag_id)
         return TopicDecorator(topic).name
-
-    subtopic = Subtopic.find(tag_id)
-
-    if subtopic:
-        return SubtopicDecorator(subtopic).name
-
-    return None
+    except t.ObjectNotFound as e:
+        try:
+            subtopic = Subtopic.find(tag_id)
+            return SubtopicDecorator(subtopic).name
+        except t.ObjectNotFound as e:
+            return None
 
 
 class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):

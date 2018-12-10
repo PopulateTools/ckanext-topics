@@ -10,7 +10,7 @@ import ckan.model as model
 import dateutil.parser as date_parser
 
 from ckan.common import c
-from ckanext.topics.lib.topic import Topic
+from ckanext.topics.lib.topic import Topic, TopicPositionDuplicated
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.topic_decorator import TopicDecorator
 from ckanext.topics.lib.topic_decorator import SubtopicDecorator
@@ -105,8 +105,9 @@ def topic_create(context, data_dict):
     schema = context.get('schema') or \
         ckan.logic.schema.default_create_tag_schema()
     data, errors = _validate(data_dict, schema, context)
-    # if errors:
-    #     raise ValidationError(errors)
+
+    if errors:
+        raise TopicPositionDuplicated
 
     tag = model_save.tag_dict_save(data_dict, context)
 

@@ -37,6 +37,9 @@ class TopicDecorator(object):
         if 'position' in topic_dict:
             self.position = topic_dict['position']
 
+        self.tag_name = Topic.build_tag_name(self.position)
+
+
     # must be called explicitly to avoid performance problems
     def load_subtopics(self):
         self.subtopics = [] # ensure not loading twice

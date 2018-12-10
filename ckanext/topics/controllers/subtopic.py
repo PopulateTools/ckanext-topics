@@ -8,7 +8,7 @@ import ckan.lib.helpers as h
 from ckan.model import Tag
 from ckan.common import _
 
-from ckanext.topics.lib.topic import Topic
+from ckanext.topics.lib.topic import Topic, TopicPositionDuplicated
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.tools import *
 from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
@@ -59,7 +59,7 @@ class SubtopicController(t.BaseController):
                         'term_translation': term_translation,
                         'lang_code': locale
                     })
-        except IntegrityError as e:
+        except TopicPositionDuplicated as e:
             error = _('Position is already taken')
 
         if error:
@@ -89,6 +89,7 @@ class SubtopicController(t.BaseController):
 
         subtopic_id = params['subtopic_id']
         subtopic = SubtopicDecorator(Subtopic.find(subtopic_id))
+        subtopic_old_name = subtopic.tag_name
 
         # update record
         for locale in available_locales():
@@ -101,6 +102,7 @@ class SubtopicController(t.BaseController):
                 })
         try:
             Subtopic.update_position(subtopic.id, subtopic.parent_id, params['subtopic_position'])
+            reindex_packages_with_changed_topic(subtopic_old_name)
         except IntegrityError as e:
             error = _('Position is already taken')
 
@@ -109,8 +111,6 @@ class SubtopicController(t.BaseController):
         else:
             h.flash_success(_('Subtopic updated successfully'))
 
-        #reindex_packages_with_changed_topic(old_name)
-
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')
 
     def destroy(self):
@@ -118,11 +118,11 @@ class SubtopicController(t.BaseController):
         params = t.request.params
 
         subtopic_id = t.request.params['id']
-        subtopic    = SubtopicDecorator(Subtopic.find(subtopic_id))
-
-        #old_name = subtopic['name']
+        subtopic = SubtopicDecorator(Subtopic.find(subtopic_id))
+        subtopic_old_name = subtopic.tag_name
 
         Subtopic.destroy(context, subtopic_id)
+        reindex_packages_with_changed_topic(subtopic_old_name)
 
         # update positions of following subtopics
         destroyed_position = int(subtopic.position)
@@ -132,7 +132,5 @@ class SubtopicController(t.BaseController):
             if subtopic_pos > destroyed_position:
                 new_position = subtopic_pos - 1
                 Subtopic.update_position(subtopic.id, subtopic.parent_id, new_position)
-
-        #reindex_packages_with_changed_topic(old_name)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')

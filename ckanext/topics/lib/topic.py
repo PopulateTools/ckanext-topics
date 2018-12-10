@@ -11,6 +11,10 @@ from ckanext.topics.lib.alphabetic_index import AlphabeticIndex
 from ckanext.topics.lib.tools import *
 
 
+class TopicPositionDuplicated(Exception):
+    pass
+
+
 class Topic(object):
 
     @classmethod

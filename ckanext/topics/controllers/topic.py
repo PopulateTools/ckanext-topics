@@ -8,7 +8,7 @@ import ckan.lib.helpers as h
 from ckan.model import Tag
 from ckan.common import _, c, json
 
-from ckanext.topics.lib.topic import Topic
+from ckanext.topics.lib.topic import Topic, TopicPositionDuplicated
 from ckanext.topics.lib.topic_decorator import TopicDecorator
 from ckanext.topics.lib.subtopic import Subtopic
 from ckanext.topics.lib.tools import *
@@ -79,6 +79,7 @@ class TopicController(t.BaseController):
     def update(self):
         params = t.request.params
         topic = Topic.find(params['topic_id'])
+        topic_old_name = topic.tag_name
         error = None
 
         # update topic
@@ -87,15 +88,14 @@ class TopicController(t.BaseController):
 
         try:
             Topic.update_position(topic['id'], params['topic_position'])
-        except IntegrityError as e:
+            reindex_packages_with_changed_topic(topic_old_name)
+        except TopicPositionDuplicated as e:
             error = _('Position is already taken')
 
         if error:
             h.flash_error(error)
         else:
             h.flash_success(_('Topic updated successfully'))
-
-        # reindex_packages_with_changed_topic(old_topic_name)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='edit', id=topic['id'])
 
@@ -104,16 +104,15 @@ class TopicController(t.BaseController):
 
         topic_id = t.request.params['id']
         topic = TopicDecorator(Topic.find(topic_id))
-
-        #old_topic_name = topic['name']
+        topic_old_name = topic.tag_name
+        destroyed_position = topic.position
 
         # destroy topic and related subtopics
         for subtopic in Subtopic.by_topic(topic.id):
             Subtopic.destroy(context, subtopic['id'])
 
         Topic.destroy(context, topic.id)
-
-        destroyed_position = topic.position
+        reindex_packages_with_changed_topic(topic_old_name)
 
         # TODO: destroy term translations (no API available)
 
@@ -124,7 +123,5 @@ class TopicController(t.BaseController):
             if int(topic.position) > int(destroyed_position):
                 new_topic_position = int(topic.position) - 1
                 Topic.update_position(topic.id, new_topic_position)
-
-        # TODO: reindex_packages_with_changed_topic(old_topic_name)
 
         t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='index')

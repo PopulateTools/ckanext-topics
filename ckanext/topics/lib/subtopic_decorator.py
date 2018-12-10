@@ -43,5 +43,10 @@ class SubtopicDecorator(object):
         if 'position' in subtopic_dict:
             self.position = int(subtopic_dict['position'])
 
+        if self.position and self.parent_id:
+            self.tag_name = Subtopic.build_tag_name(self.position, self.parent_id)
+        else:
+            self.tag_name = None
+
     def to_s(self):
         return "[SubopicDecorator] id: " + str(self.id) + " name: " + str(self.name) + " parent_id: " + str(self.parent_id) + " position: " + str(self.position)

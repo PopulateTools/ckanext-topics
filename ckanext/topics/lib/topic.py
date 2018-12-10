@@ -8,6 +8,7 @@ import ckan.lib.helpers as h
 
 from ckan.model import Tag
 from ckanext.topics.lib.tools import *
+from sqlalchemy.exc import IntegrityError
 
 
 class TopicPositionDuplicated(Exception):
@@ -62,7 +63,10 @@ class Topic(object):
         session = model.Session
         matched_tag = session.query(Tag).filter(Tag.id == topic_id).first()
         matched_tag.name = str(new_position)
-        model.Session.commit()
+        try:
+            model.Session.commit()
+        except IntegrityError as e:
+            raise TopicPositionDuplicated
 
     @classmethod
     def update_name(cls, topic_id, name_translations={}):

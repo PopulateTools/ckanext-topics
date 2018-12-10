@@ -8,6 +8,7 @@ import ckan.model as model
 from ckan.model import Tag
 
 from ckanext.topics.lib.topic import Topic
+from sqlalchemy.exc import IntegrityError
 
 
 class Subtopic(object):
@@ -62,7 +63,10 @@ class Subtopic(object):
         session = model.Session
         matched_tag = session.query(Tag).filter(Tag.id == subtopic_id).first()
         matched_tag.name = str(new_position) + '_' + parent_id
-        model.Session.commit()
+        try:
+            model.Session.commit()
+        except IntegrityError as e:
+            raise TopicPositionDuplicated
 
     @classmethod
     def get_free_position(cls, topic_id):

@@ -33,26 +33,35 @@ def current_user_is_admin():
     return user_is_admin(c.user)
 
 
-def custom_topics():
+def custom_topics(sorted=False):
     collection = []
     for topic in Topic.all():
         collection.append(TopicDecorator(topic))
 
+    if sorted:
+        collection.sort(key=lambda topic: topic.position)
+
     return collection
 
 
-def custom_subtopics():
+def custom_subtopics(sorted=False):
     collection = []
     for subtopic in Subtopic.all():
         collection.append(SubtopicDecorator(subtopic))
 
+    if sorted:
+        collection.sort(key=lambda subtopic: subtopic.position)
+
     return collection
 
 
-def topic_subtopics(topic_id):
+def topic_subtopics(topic_id, sorted=False):
     topic_subtopics = []
     for subtopic in Subtopic.by_topic(topic_id):
         topic_subtopics.append(SubtopicDecorator(subtopic))
+
+    if sorted:
+        topic_subtopics.sort(key=lambda subtopic: subtopic.position)
 
     return topic_subtopics
 

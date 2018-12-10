@@ -41,10 +41,13 @@ class TopicDecorator(object):
 
 
     # must be called explicitly to avoid performance problems
-    def load_subtopics(self):
+    def load_subtopics(self, sorted=False):
         self.subtopics = [] # ensure not loading twice
         for subtopic in Subtopic.by_topic(self.id):
             self.subtopics.append(SubtopicDecorator(subtopic))
+
+        if sorted:
+            self.subtopics.sort(key=lambda subtopic: subtopic.position)
 
 
     def to_s(self):

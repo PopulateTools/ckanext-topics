@@ -1,1 +1,2 @@
-{{ h.topic_name_from_tags(data.tags) }}
+{% set topic_name = h.topic_name_from_tags(data.tags) %}
+{{ topic_name if topic_name }}

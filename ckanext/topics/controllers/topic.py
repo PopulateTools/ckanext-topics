@@ -30,8 +30,10 @@ class TopicController(t.BaseController):
 
         for raw_topic in Topic.all():
             topic = TopicDecorator(raw_topic)
-            topic.load_subtopics()
+            topic.load_subtopics(sorted=True)
             topics.append(topic)
+
+        topics.sort(key=lambda topic: topic.position)
 
         extra_vars = { 'topics': topics }
 
@@ -75,16 +77,16 @@ class TopicController(t.BaseController):
 
     def update(self):
         params = t.request.params
-        topic = Topic.find(params['topic_id'])
+        topic = TopicDecorator(Topic.find(params['topic_id']))
         topic_old_name = topic.tag_name
         error = None
 
         # update topic
         names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
-        Topic.update_name(topic['id'], names)
+        Topic.update_name(topic.id, names)
 
         try:
-            Topic.update_position(topic['id'], params['topic_position'])
+            Topic.update_position(topic.id, params['topic_position'])
             reindex_packages_with_changed_topic(topic_old_name)
         except TopicPositionDuplicated as e:
             error = _('Position is already taken')
@@ -94,7 +96,7 @@ class TopicController(t.BaseController):
         else:
             h.flash_success(_('Topic updated successfully'))
 
-        t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='edit', id=topic['id'])
+        t.redirect_to(controller='ckanext.topics.controllers.topic:TopicController', action='edit', id=topic.id)
 
     def destroy(self):
         context = { 'user': t.c.user }

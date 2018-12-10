@@ -1,1 +1,2 @@
-{{ h.subtopic_name_from_tags(data.tags) }}
+{% set subtopic_name = h.subtopic_name_from_tags(data.tags) %}
+{{ subtopic_name if subtopic_name }}

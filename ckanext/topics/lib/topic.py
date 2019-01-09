@@ -20,6 +20,11 @@ class Topic(object):
     @classmethod
     def find(cls, topic_id_or_name):
         topic_info = t.get_action('tag_show')(data_dict={ 'id': topic_id_or_name, 'vocabulary_id': cls.vocabulary_id(), 'include_datasets': False })
+
+        # BUG: for some reason CKAN returns tags from other vocabularies
+        if (topic_info['vocabulary_id'] != cls.vocabulary_id()):
+            raise t.ObjectNotFound
+
         topic_name = topic_info['name']
         topic = {
             'id': topic_info['id'],

@@ -16,6 +16,11 @@ class Subtopic(object):
     @classmethod
     def find(cls, subtopic_id_or_name):
         subtopic_info = t.get_action('tag_show')(data_dict={ 'id': subtopic_id_or_name, 'vocabulary_id': cls.vocabulary_id(), 'include_datasets': False })
+
+        # BUG: for some reason CKAN returns tags from other vocabularies
+        if (subtopic_info['vocabulary_id'] != cls.vocabulary_id()):
+            raise t.ObjectNotFound
+
         subtopic_name = subtopic_info['name']
         subtopic = {
             'id': subtopic_info['id'],

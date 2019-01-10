@@ -55,7 +55,7 @@ class TopicController(t.BaseController):
         try:
             tag = t.get_action('topic_create')(context, Topic.build_tag_dict(position))
             names = {}
-            for locale in h.available_locales():
+            for locale in available_locales():
                 names[locale] = params['topic_name_' + locale]
 
             Topic.update_name(tag['id'], names)
@@ -86,7 +86,7 @@ class TopicController(t.BaseController):
 
         # update topic
         names = {}
-        for locale in h.available_locales():
+        for locale in available_locales():
                 names[locale] = params['topic_name_' + locale]
 
         Topic.update_name(topic.id, names)

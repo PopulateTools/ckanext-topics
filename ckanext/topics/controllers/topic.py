@@ -54,7 +54,10 @@ class TopicController(t.BaseController):
         # create topic
         try:
             tag = t.get_action('topic_create')(context, Topic.build_tag_dict(position))
-            names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
+            names = {}
+            for locale in h.available_locales():
+                names[locale] = params['topic_name_' + locale]
+
             Topic.update_name(tag['id'], names)
         except TopicPositionDuplicated as e:
             error = _('Position is already taken')
@@ -82,7 +85,10 @@ class TopicController(t.BaseController):
         error = None
 
         # update topic
-        names = { 'es': params['topic_name_es'], 'en': params['topic_name_en'], 'eu': params['topic_name_eu'] }
+        names = {}
+        for locale in h.available_locales():
+                names[locale] = params['topic_name_' + locale]
+
         Topic.update_name(topic.id, names)
 
         try:

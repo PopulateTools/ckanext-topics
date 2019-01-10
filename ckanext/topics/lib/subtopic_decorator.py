@@ -11,9 +11,12 @@ class SubtopicDecorator(object):
     def __init__(self, subtopic_dict):
         if 'id' in subtopic_dict:
             self.id = subtopic_dict['id']
-            self.search_results_url = h.url_for(controller='package', action='search', vocab_custom_subtopics=self.id)
         else:
             self.id = None
+
+        if 'name' in subtopic_dict:
+            self.search_results_url = h.url_for(controller='package', action='search', vocab_custom_subtopics=subtopic_dict['name'])
+        else:
             self.search_results_url = None
 
         if self.id:

@@ -13,9 +13,12 @@ class TopicDecorator(object):
     def __init__(self, topic_dict):
         if 'id' in topic_dict:
             self.id = topic_dict['id']
-            self.search_results_url = h.url_for(controller='package', action='search', vocab_custom_topics=self.id)
         else:
             self.id = None
+
+        if 'name' in topic_dict:
+            self.search_results_url = h.url_for(controller='package', action='search', vocab_custom_topics=topic_dict['name'])
+        else:
             self.search_results_url = None
 
         if self.id:

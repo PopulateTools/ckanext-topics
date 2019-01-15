@@ -57,4 +57,4 @@ def convert_to_custom_topic_tags(vocab):
 
 
 def parsed_vocab(vocab):
-    return re.sub("custom_topic\[\]", "custom_topics", vocab)
+    return re.sub("custom_topic", "custom_topics", vocab)

@@ -6,7 +6,7 @@
     <label class="control-label" for="field-custom_topic">{{ _('Topics') }}</label>
 
     <div class="controls">
-      <select multiple id="field-custom_topic" name="custom_topic[]" data-module="autocomplete" style="width: 100%">
+      <select multiple id="field-custom_topic" name="custom_topic" data-module="autocomplete" style="width: 100%">
 
         {% for topic in h.custom_topics()  %}
           <option value="{{ topic.id }}" {% if h.topic_is_selected(topic, data) %}selected="selected"{% endif %}>

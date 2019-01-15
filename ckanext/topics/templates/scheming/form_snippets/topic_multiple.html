@@ -1,0 +1,23 @@
+{% resource 'topics/topic_multiple.js' %}
+
+<div data-module="custom_topic_selector">
+
+  <div class="form-group control-small">
+    <label class="control-label" for="field-custom_topic">{{ _('Topics') }}</label>
+
+    <div class="controls">
+      <select multiple id="field-custom_topic" name="custom_topic[]" data-module="autocomplete" style="width: 100%">
+
+        {% for topic in h.custom_topics()  %}
+          <option value="{{ topic.id }}" {% if h.topic_is_selected(topic, data) %}selected="selected"{% endif %}>
+            {{ topic.name }}
+          </option>
+        {% endfor %}
+
+      </select>
+
+      <input type="hidden" name="custom_topic[]" value=""></input>
+    </div>
+
+  </div>
+</div>

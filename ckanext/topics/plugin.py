@@ -158,6 +158,15 @@ def topic_facet_name(tag_id):
             return None
 
 
+def topic_is_selected(topic_decorator, package_dict):
+    if not ('tags' in package_dict):
+       return False
+
+    package_tags_ids = map(lambda tag: tag['id'], package_dict['tags'])
+
+    return (topic_decorator.id in package_tags_ids)
+
+
 class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):
 
     p.implements(p.IDatasetForm)
@@ -243,7 +252,8 @@ class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):
             'topic_name_from_tags': topic_name_from_tags,
             'subtopic_name_from_tags': subtopic_name_from_tags,
             'topic_name_from_facet_item': topic_name_from_facet_item,
-            'subtopic_name_from_facet_item': subtopic_name_from_facet_item
+            'subtopic_name_from_facet_item': subtopic_name_from_facet_item,
+            'topic_is_selected': topic_is_selected
         }
 
     ## IFacets

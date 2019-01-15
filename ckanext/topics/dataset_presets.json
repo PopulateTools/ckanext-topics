@@ -16,6 +16,13 @@
         "display_snippet": "custom_subtopic.html",
         "form_snippet": "blank.html"
       }
+    },
+    {
+      "preset_name": "custom_topic_multiple",
+      "values": {
+        "display_snippet": "custom_topic_multiple.html",
+        "form_snippet": "topic_multiple.html"
+      }
     }
   ]
 }

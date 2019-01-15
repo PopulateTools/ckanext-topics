@@ -76,6 +76,19 @@ def subtopic_name_from_tags(tags):
     return subtopic_id_from_tags(tags)
 
 
+def package_topics(package_id):
+    package = t.get_action('package_show')(data_dict={ 'id': package_id })
+    tags = package['tags']
+
+    topics = []
+
+    for tag in tags:
+        if (tag['vocabulary_id'] == Topic.vocabulary_id()):
+            topics.append(TopicDecorator(Topic.find(tag['id'])))
+
+    return topics
+
+
 def topic_id_from_tags(tags):
     for tag in tags:
         if (tag['vocabulary_id'] == Topic.vocabulary_id()):
@@ -251,6 +264,7 @@ class TopicsPlugin(p.SingletonPlugin, t.DefaultDatasetForm):
             'subtopic_id_from_tags': subtopic_id_from_tags,
             'topic_name_from_tags': topic_name_from_tags,
             'subtopic_name_from_tags': subtopic_name_from_tags,
+            'package_topics': package_topics,
             'topic_name_from_facet_item': topic_name_from_facet_item,
             'subtopic_name_from_facet_item': subtopic_name_from_facet_item,
             'topic_is_selected': topic_is_selected

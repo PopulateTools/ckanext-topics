@@ -1,7 +1,7 @@
 {% extends "page.html" %}
 
 {% block breadcrumb_content %}
-  <li>{% link_for _('Temas'), controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
+  <li>{% link_for _('Topics'), controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
   <li><a href="{{ h.url_for('topic_edit', id=subtopic.parent_id) }}">{{ h.subtopic_parent_name(subtopic) }}</a></li>
   <li class="active">
       {% if subtopic.id %}{{ subtopic.name }}{% else %}{{ _('New') }}{% endif %}
@@ -37,7 +37,7 @@
 
     <div class="form-actions">
       {% if subtopic.id %}
-          <a class="btn btn-danger pull-left" href="{{ h.url_for('subtopic_destroy', id=subtopic.id) }}" data-module="confirm-action" data-module-content="{{ _('¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de los datasets asociados.') }}">{{ _('Borrar') }}</a>
+          <a class="btn btn-danger pull-left" href="{{ h.url_for('subtopic_destroy', id=subtopic.id) }}" data-module="confirm-action" data-module-content="{{ _('¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de los datasets asociados.') }}">{{ _('Delete') }}</a>
           <button class="btn btn-primary" name="save" type="submit">{{ _('Update') }}</button>
       {% else %}
           <button class="btn btn-primary" name="save" type="submit">{{ _('Create') }}</button>

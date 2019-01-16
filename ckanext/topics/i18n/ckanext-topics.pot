@@ -1,0 +1,180 @@
+# Translations template for ckanext-topics.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the ckanext-topics project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-topics 0.0.1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-01-16 22:37+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ckanext/topics/plugin.py:276
+#: ckanext/topics/templates/scheming/form_snippets/topic_multiple.html:6
+#: ckanext/topics/templates/subtopic/edit.html:4
+#: ckanext/topics/templates/topic/base.html:3
+#: ckanext/topics/templates/topic/index.html:20
+#: ckanext/topics/templates/user/dashboard.html:14
+msgid "Topics"
+msgstr ""
+
+#: ckanext/topics/plugin.py:277 ckanext/topics/templates/topic/index.html:39
+msgid "Subtopics"
+msgstr ""
+
+#: ckanext/topics/controllers/subtopic.py:24 ckanext/topics/controllers/topic.py:25
+msgid "Not authorized to see this page"
+msgstr ""
+
+#: ckanext/topics/controllers/subtopic.py:60
+#: ckanext/topics/controllers/subtopic.py:104
+#: ckanext/topics/controllers/topic.py:63 ckanext/topics/controllers/topic.py:98
+msgid "Position is already taken"
+msgstr ""
+
+#: ckanext/topics/controllers/subtopic.py:65
+msgid "Subtopic created successfully"
+msgstr ""
+
+#: ckanext/topics/controllers/subtopic.py:109
+msgid "Subtopic updated successfully"
+msgstr ""
+
+#: ckanext/topics/controllers/topic.py:68
+msgid "Topic created successfully"
+msgstr ""
+
+#: ckanext/topics/controllers/topic.py:103
+msgid "Topic updated successfully"
+msgstr ""
+
+#: ckanext/topics/lib/converters.py:50
+#, python-format
+msgid "Tag vocabulary \"%s\" does not exist"
+msgstr ""
+
+#: ckanext/topics/lib/validators.py:19
+#, python-format
+msgid "Tag %s does not belong to vocabulary %s"
+msgstr ""
+
+#: ckanext/topics/templates/package/snippets/additional_info.html:9
+#: ckanext/topics/templates/scheming/form_snippets/topic_subtopic.html:7
+msgid "Topic"
+msgstr ""
+
+#: ckanext/topics/templates/package/snippets/additional_info.html:20
+#: ckanext/topics/templates/scheming/form_snippets/topic_subtopic.html:22
+msgid "Subtopic"
+msgstr ""
+
+#: ckanext/topics/templates/snippets/facet_list.html:25
+msgid "Show More {facet_type}"
+msgstr ""
+
+#: ckanext/topics/templates/snippets/facet_list.html:28
+msgid "Show Only Popular {facet_type}"
+msgstr ""
+
+#: ckanext/topics/templates/snippets/facet_list.html:32
+msgid "There are no {facet_type} that match this search"
+msgstr ""
+
+#: ckanext/topics/templates/snippets/search_form.html:17
+msgid "Remove"
+msgstr ""
+
+#: ckanext/topics/templates/snippets/search_form.html:22
+msgid "Filter Results"
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:7
+#: ckanext/topics/templates/topic/edit.html:6
+msgid "New"
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:23
+#: ckanext/topics/templates/topic/edit.html:20
+msgid "Name"
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:32
+#: ckanext/topics/templates/topic/edit.html:29
+msgid "Position"
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:40
+msgid ""
+"¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de "
+"los datasets asociados."
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:40
+#: ckanext/topics/templates/topic/edit.html:39
+msgid "Delete"
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:41
+#: ckanext/topics/templates/topic/edit.html:41
+msgid "Update"
+msgstr ""
+
+#: ckanext/topics/templates/subtopic/edit.html:43
+#: ckanext/topics/templates/topic/edit.html:43
+msgid "Create"
+msgstr ""
+
+#: ckanext/topics/templates/topic/edit.html:38
+msgid ""
+"Do you really want to delete this topic and its subtopics? The topic and "
+"subtopics will be removed from the linked datasets."
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:15
+#: ckanext/topics/templates/user/dashboard.html:9
+msgid "News feed"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:16
+#: ckanext/topics/templates/user/dashboard.html:10
+msgid "My Datasets"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:17
+#: ckanext/topics/templates/user/dashboard.html:11
+msgid "My Organizations"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:18
+#: ckanext/topics/templates/user/dashboard.html:12
+msgid "My Groups"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:45
+msgid "Edit"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:50
+msgid "There are no subtopics"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:54
+msgid "Edit topic"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:56
+msgid "New subtopic"
+msgstr ""
+
+#: ckanext/topics/templates/user/dashboard.html:6
+msgid "Edit settings"
+msgstr ""
+

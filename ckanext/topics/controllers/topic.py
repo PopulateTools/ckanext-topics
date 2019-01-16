@@ -18,10 +18,9 @@ class TopicController(t.BaseController):
 
     def __before__(self, action, **env):
         super(TopicController, self).__before__(action, **env)
+        current_username = t.c.user
 
-        current_username = env['environ']['REMOTE_USER']
-
-        if (current_username == None) or not user_is_admin(current_username):
+        if not current_username or not user_is_admin(current_username):
             base.abort(403, _('Not authorized to see this page'))
 
     def index(self):

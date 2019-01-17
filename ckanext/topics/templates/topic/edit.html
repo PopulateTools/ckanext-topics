@@ -1,7 +1,7 @@
 {% extends "topic/base.html" %}
 
 {% block breadcrumb_content %}
-  <li>{% link_for 'Topics', controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
+  <li>{% link_for _('Topics'), controller='ckanext.topics.controllers.topic:TopicController', action='index' %}</li>
   <li class="active">
     {% if topic.id %}{{ topic.name }}{% else %}{{ _('New') }}{% endif %}
   </li>

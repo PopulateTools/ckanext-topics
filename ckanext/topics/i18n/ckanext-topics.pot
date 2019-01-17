@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-topics 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-17 11:33+0100\n"
+"POT-Creation-Date: 2019-01-17 18:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,8 @@ msgstr ""
 #: ckanext/topics/templates/scheming/form_snippets/topic_multiple.html:6
 #: ckanext/topics/templates/subtopic/edit.html:4
 #: ckanext/topics/templates/topic/base.html:3
+#: ckanext/topics/templates/topic/base.html:7
+#: ckanext/topics/templates/topic/edit.html:4
 #: ckanext/topics/templates/topic/index.html:4
 #: ckanext/topics/templates/topic/index.html:20
 #: ckanext/topics/templates/user/dashboard.html:14

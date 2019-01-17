@@ -166,7 +166,7 @@ msgstr "Mis Grupos"
 #: ckanext/topics/templates/topic/index.html:29
 #, fuzzy
 msgid "New topic"
-msgstr "Nueva subcategoría"
+msgstr "Nueva categoría"
 
 #: ckanext/topics/templates/topic/index.html:45
 msgid "Edit"
@@ -174,7 +174,7 @@ msgstr "Editar"
 
 #: ckanext/topics/templates/topic/index.html:50
 msgid "There are no subtopics"
-msgstr ""
+msgstr "No hay subcategorías"
 
 #: ckanext/topics/templates/topic/index.html:54
 msgid "Edit topic"

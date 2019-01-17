@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-topics 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-16 22:37+0100\n"
+"POT-Creation-Date: 2019-01-17 11:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,7 @@ msgstr ""
 #: ckanext/topics/templates/scheming/form_snippets/topic_multiple.html:6
 #: ckanext/topics/templates/subtopic/edit.html:4
 #: ckanext/topics/templates/topic/base.html:3
+#: ckanext/topics/templates/topic/index.html:4
 #: ckanext/topics/templates/topic/index.html:20
 #: ckanext/topics/templates/user/dashboard.html:14
 msgid "Topics"
@@ -30,13 +31,13 @@ msgstr ""
 msgid "Subtopics"
 msgstr ""
 
-#: ckanext/topics/controllers/subtopic.py:24 ckanext/topics/controllers/topic.py:25
+#: ckanext/topics/controllers/subtopic.py:24 ckanext/topics/controllers/topic.py:24
 msgid "Not authorized to see this page"
 msgstr ""
 
 #: ckanext/topics/controllers/subtopic.py:60
 #: ckanext/topics/controllers/subtopic.py:104
-#: ckanext/topics/controllers/topic.py:63 ckanext/topics/controllers/topic.py:98
+#: ckanext/topics/controllers/topic.py:62 ckanext/topics/controllers/topic.py:97
 msgid "Position is already taken"
 msgstr ""
 
@@ -48,11 +49,11 @@ msgstr ""
 msgid "Subtopic updated successfully"
 msgstr ""
 
-#: ckanext/topics/controllers/topic.py:68
+#: ckanext/topics/controllers/topic.py:67
 msgid "Topic created successfully"
 msgstr ""
 
-#: ckanext/topics/controllers/topic.py:103
+#: ckanext/topics/controllers/topic.py:102
 msgid "Topic updated successfully"
 msgstr ""
 
@@ -156,6 +157,10 @@ msgstr ""
 #: ckanext/topics/templates/topic/index.html:18
 #: ckanext/topics/templates/user/dashboard.html:12
 msgid "My Groups"
+msgstr ""
+
+#: ckanext/topics/templates/topic/index.html:29
+msgid "New topic"
 msgstr ""
 
 #: ckanext/topics/templates/topic/index.html:45

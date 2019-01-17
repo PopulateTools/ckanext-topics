@@ -8,21 +8,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-topics 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-16 22:37+0100\n"
+"POT-Creation-Date: 2019-01-17 11:33+0100\n"
 "PO-Revision-Date: 2019-01-16 22:38+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: eu\n"
 "Language-Team: eu <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: ckanext/topics/plugin.py:276
 #: ckanext/topics/templates/scheming/form_snippets/topic_multiple.html:6
 #: ckanext/topics/templates/subtopic/edit.html:4
 #: ckanext/topics/templates/topic/base.html:3
+#: ckanext/topics/templates/topic/index.html:4
 #: ckanext/topics/templates/topic/index.html:20
 #: ckanext/topics/templates/user/dashboard.html:14
 msgid "Topics"
@@ -33,14 +34,14 @@ msgid "Subtopics"
 msgstr "Subcategorías"
 
 #: ckanext/topics/controllers/subtopic.py:24
-#: ckanext/topics/controllers/topic.py:25
+#: ckanext/topics/controllers/topic.py:24
 msgid "Not authorized to see this page"
 msgstr "No estás autorizado para ver esta página"
 
 #: ckanext/topics/controllers/subtopic.py:60
 #: ckanext/topics/controllers/subtopic.py:104
-#: ckanext/topics/controllers/topic.py:63
-#: ckanext/topics/controllers/topic.py:98
+#: ckanext/topics/controllers/topic.py:62
+#: ckanext/topics/controllers/topic.py:97
 msgid "Position is already taken"
 msgstr "La posición ya está ocupada"
 
@@ -52,11 +53,11 @@ msgstr "Subcategoría creada correctamente"
 msgid "Subtopic updated successfully"
 msgstr "Subcategoría actualizada correctamente"
 
-#: ckanext/topics/controllers/topic.py:68
+#: ckanext/topics/controllers/topic.py:67
 msgid "Topic created successfully"
 msgstr "Categoría creada correctamente"
 
-#: ckanext/topics/controllers/topic.py:103
+#: ckanext/topics/controllers/topic.py:102
 msgid "Topic updated successfully"
 msgstr "Categoría actualizada correctamente"
 
@@ -117,8 +118,8 @@ msgstr "Posición"
 
 #: ckanext/topics/templates/subtopic/edit.html:40
 msgid ""
-"¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá"
-" de los datasets asociados."
+"¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de "
+"los datasets asociados."
 msgstr ""
 
 #: ckanext/topics/templates/subtopic/edit.html:40
@@ -161,6 +162,11 @@ msgstr "Mis Organizaciones"
 #: ckanext/topics/templates/user/dashboard.html:12
 msgid "My Groups"
 msgstr "Mis Grupos"
+
+#: ckanext/topics/templates/topic/index.html:29
+#, fuzzy
+msgid "New topic"
+msgstr "Nueva subcategoría"
 
 #: ckanext/topics/templates/topic/index.html:45
 msgid "Edit"

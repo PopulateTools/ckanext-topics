@@ -11,7 +11,7 @@
       {{ h.build_nav_icon('dashboard.organizations', _('My Organizations')) }}
       {{ h.build_nav_icon('dashboard.groups', _('My Groups')) }}
       {% if h.current_user_is_admin() %}
-        <li><a href="/topic">{{ _('Topics') }}</a></li>
+        <li><a href="{{ h.url_for('topic_index') }}">{{ _('Topics') }}</a></li>
       {% endif %}
     </ul>
   </header>

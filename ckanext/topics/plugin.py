@@ -32,11 +32,17 @@ _check_access = logic.check_access
 def current_user_is_admin():
     return user_is_admin(c.user)
 
-
-def custom_topics(sorted=False):
+def custom_topics(sorted=False, exclude_unassigned_topics=False):
     collection = []
     for topic in Topic.all():
-        collection.append(TopicDecorator(topic))
+        topic_decorator = TopicDecorator(topic)
+
+        if exclude_unassigned_topics:
+            result = t.get_action('package_search')({},{ 'rows': 1, 'fq': 'vocab_custom_topics:\"' + topic_decorator.tag_name + '\"' })
+            if result['count'] > 0:
+                collection.append(topic_decorator)
+        else:
+            collection.append(topic_decorator)
 
     if sorted:
         collection.sort(key=lambda topic: topic.position)

@@ -67,7 +67,7 @@ class Subtopic(object):
     def update_position(cls, subtopic_id, parent_id, new_position):
         session = model.Session
         matched_tag = session.query(Tag).filter(Tag.id == subtopic_id).first()
-        matched_tag.name = str(new_position) + '_' + parent_id
+        matched_tag.name = cls.build_tag_name(new_position, parent_id)
         try:
             model.Session.commit()
         except IntegrityError as e:

@@ -67,7 +67,8 @@ class Topic(object):
     def update_position(cls, topic_id, new_position):
         session = model.Session
         matched_tag = session.query(Tag).filter(Tag.id == topic_id).first()
-        matched_tag.name = str(new_position)
+        matched_tag.name = cls.build_tag_name(new_position)
+
         try:
             model.Session.commit()
         except IntegrityError as e:

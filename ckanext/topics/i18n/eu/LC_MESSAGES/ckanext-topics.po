@@ -29,39 +29,39 @@ msgstr ""
 #: ckanext/topics/templates/topic/index.html:20
 #: ckanext/topics/templates/user/dashboard.html:14
 msgid "Topics"
-msgstr "Categorías"
+msgstr "Kategoriak"
 
 #: ckanext/topics/plugin.py:277 ckanext/topics/templates/topic/index.html:39
 msgid "Subtopics"
-msgstr "Subcategorías"
+msgstr "Azpikategoriak"
 
 #: ckanext/topics/controllers/subtopic.py:24
 #: ckanext/topics/controllers/topic.py:24
 msgid "Not authorized to see this page"
-msgstr "No estás autorizado para ver esta página"
+msgstr "Ez duzu baimenik orrialde hau ikusteko"
 
 #: ckanext/topics/controllers/subtopic.py:60
 #: ckanext/topics/controllers/subtopic.py:104
 #: ckanext/topics/controllers/topic.py:62
 #: ckanext/topics/controllers/topic.py:97
 msgid "Position is already taken"
-msgstr "La posición ya está ocupada"
+msgstr "Posizioa dagoeneko okupatzen da"
 
 #: ckanext/topics/controllers/subtopic.py:65
 msgid "Subtopic created successfully"
-msgstr "Subcategoría creada correctamente"
+msgstr "Azpikategoria behar bezala sortu da"
 
 #: ckanext/topics/controllers/subtopic.py:109
 msgid "Subtopic updated successfully"
-msgstr "Subcategoría actualizada correctamente"
+msgstr "Azpidaziorako zuzeneko eguneratua"
 
 #: ckanext/topics/controllers/topic.py:67
 msgid "Topic created successfully"
-msgstr "Categoría creada correctamente"
+msgstr "Kategoria sortu behar bezala"
 
 #: ckanext/topics/controllers/topic.py:102
 msgid "Topic updated successfully"
-msgstr "Categoría actualizada correctamente"
+msgstr "Kategoria behar bezala eguneratu da"
 
 #: ckanext/topics/lib/converters.py:50
 #, python-format
@@ -76,12 +76,12 @@ msgstr "%s etiketa ez dago %s lexikoaren barnean"
 #: ckanext/topics/templates/package/snippets/additional_info.html:9
 #: ckanext/topics/templates/scheming/form_snippets/topic_subtopic.html:7
 msgid "Topic"
-msgstr "Categoría"
+msgstr "Kategoria"
 
 #: ckanext/topics/templates/package/snippets/additional_info.html:20
 #: ckanext/topics/templates/scheming/form_snippets/topic_subtopic.html:22
 msgid "Subtopic"
-msgstr "Subcategoría"
+msgstr "Azpikategoria"
 
 #: ckanext/topics/templates/snippets/facet_list.html:25
 msgid "Show More {facet_type}"
@@ -106,7 +106,7 @@ msgstr "Emaitzak iragazi"
 #: ckanext/topics/templates/subtopic/edit.html:7
 #: ckanext/topics/templates/topic/edit.html:6
 msgid "New"
-msgstr "Nuevo"
+msgstr "Gehitu"
 
 #: ckanext/topics/templates/subtopic/edit.html:23
 #: ckanext/topics/templates/topic/edit.html:20
@@ -116,13 +116,13 @@ msgstr "Izena"
 #: ckanext/topics/templates/subtopic/edit.html:32
 #: ckanext/topics/templates/topic/edit.html:29
 msgid "Position"
-msgstr "Posición"
+msgstr "Posizio"
 
 #: ckanext/topics/templates/subtopic/edit.html:40
 msgid ""
 "¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de "
 "los datasets asociados."
-msgstr ""
+msgstr "Ziur azpitalde hau ezabatu nahi duzula? Subtopicek lotutako datu multzoetatik desagertuko dira."
 
 #: ckanext/topics/templates/subtopic/edit.html:40
 #: ckanext/topics/templates/topic/edit.html:39
@@ -143,7 +143,7 @@ msgstr "Sortu"
 msgid ""
 "Do you really want to delete this topic and its subtopics? The topic and "
 "subtopics will be removed from the linked datasets."
-msgstr ""
+msgstr "Benetan kendu nahi duzu gai hau eta haren azpikontzetak? Gaia eta subtopiak loturiko datu multzoetatik kenduko dira."
 
 #: ckanext/topics/templates/topic/index.html:15
 #: ckanext/topics/templates/user/dashboard.html:9
@@ -168,7 +168,7 @@ msgstr "Nire taldeak"
 #: ckanext/topics/templates/topic/index.html:29
 #, fuzzy
 msgid "New topic"
-msgstr "Nueva categoría"
+msgstr "Kategoria berria"
 
 #: ckanext/topics/templates/topic/index.html:45
 msgid "Edit"
@@ -176,15 +176,15 @@ msgstr "Editatu"
 
 #: ckanext/topics/templates/topic/index.html:50
 msgid "There are no subtopics"
-msgstr "No hay subcategorías"
+msgstr "Ez dago azpikategoriarik"
 
 #: ckanext/topics/templates/topic/index.html:54
 msgid "Edit topic"
-msgstr "Editar categoría"
+msgstr "Editatu kategoria"
 
 #: ckanext/topics/templates/topic/index.html:56
 msgid "New subtopic"
-msgstr "Nueva subcategoría"
+msgstr "Azpikategoria berria"
 
 #: ckanext/topics/templates/user/dashboard.html:6
 msgid "Edit settings"

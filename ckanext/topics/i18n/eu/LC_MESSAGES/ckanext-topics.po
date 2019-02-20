@@ -66,12 +66,12 @@ msgstr "Categoría actualizada correctamente"
 #: ckanext/topics/lib/converters.py:50
 #, python-format
 msgid "Tag vocabulary \"%s\" does not exist"
-msgstr "El vocabulario de tags \"%s\" no existe"
+msgstr "\"%s\" etiketen lexikoa ez da existitzen"
 
 #: ckanext/topics/lib/validators.py:19
 #, python-format
 msgid "Tag %s does not belong to vocabulary %s"
-msgstr "La categoría %s no pertenece al vocabulario %s"
+msgstr "%s etiketa ez dago %s lexikoaren barnean"
 
 #: ckanext/topics/templates/package/snippets/additional_info.html:9
 #: ckanext/topics/templates/scheming/form_snippets/topic_subtopic.html:7
@@ -85,23 +85,23 @@ msgstr "Subcategoría"
 
 #: ckanext/topics/templates/snippets/facet_list.html:25
 msgid "Show More {facet_type}"
-msgstr "Mostrar Más {facet_type}"
+msgstr "Erakutsi gehiago {facet_type}"
 
 #: ckanext/topics/templates/snippets/facet_list.html:28
 msgid "Show Only Popular {facet_type}"
-msgstr "Mostrar solo {facet_type} populares"
+msgstr "Popularrak bakarrik erakutsi {facet_type}"
 
 #: ckanext/topics/templates/snippets/facet_list.html:32
 msgid "There are no {facet_type} that match this search"
-msgstr "No hay {facet_type} que coincidan con esta búsqueda"
+msgstr "Ez dago bilaketa honekin bat egiten duen {facet_type}"
 
 #: ckanext/topics/templates/snippets/search_form.html:17
 msgid "Remove"
-msgstr "Eliminar"
+msgstr "Kendu"
 
 #: ckanext/topics/templates/snippets/search_form.html:22
 msgid "Filter Results"
-msgstr "Filtrar Resultados"
+msgstr "Emaitzak iragazi"
 
 #: ckanext/topics/templates/subtopic/edit.html:7
 #: ckanext/topics/templates/topic/edit.html:6
@@ -111,7 +111,7 @@ msgstr "Nuevo"
 #: ckanext/topics/templates/subtopic/edit.html:23
 #: ckanext/topics/templates/topic/edit.html:20
 msgid "Name"
-msgstr "Nombre"
+msgstr "Izena"
 
 #: ckanext/topics/templates/subtopic/edit.html:32
 #: ckanext/topics/templates/topic/edit.html:29
@@ -127,17 +127,17 @@ msgstr ""
 #: ckanext/topics/templates/subtopic/edit.html:40
 #: ckanext/topics/templates/topic/edit.html:39
 msgid "Delete"
-msgstr "Eliminar"
+msgstr "Ezabatu"
 
 #: ckanext/topics/templates/subtopic/edit.html:41
 #: ckanext/topics/templates/topic/edit.html:41
 msgid "Update"
-msgstr "Actualizar"
+msgstr "Eguneratu"
 
 #: ckanext/topics/templates/subtopic/edit.html:43
 #: ckanext/topics/templates/topic/edit.html:43
 msgid "Create"
-msgstr "Crear"
+msgstr "Sortu"
 
 #: ckanext/topics/templates/topic/edit.html:38
 msgid ""
@@ -148,22 +148,22 @@ msgstr ""
 #: ckanext/topics/templates/topic/index.html:15
 #: ckanext/topics/templates/user/dashboard.html:9
 msgid "News feed"
-msgstr "Actividad"
+msgstr "Albiste Feed-a"
 
 #: ckanext/topics/templates/topic/index.html:16
 #: ckanext/topics/templates/user/dashboard.html:10
 msgid "My Datasets"
-msgstr "Mis Datasets"
+msgstr "Nire Datu Multzoak"
 
 #: ckanext/topics/templates/topic/index.html:17
 #: ckanext/topics/templates/user/dashboard.html:11
 msgid "My Organizations"
-msgstr "Mis Organizaciones"
+msgstr "Nire erakundeak"
 
 #: ckanext/topics/templates/topic/index.html:18
 #: ckanext/topics/templates/user/dashboard.html:12
 msgid "My Groups"
-msgstr "Mis Grupos"
+msgstr "Nire taldeak"
 
 #: ckanext/topics/templates/topic/index.html:29
 #, fuzzy
@@ -172,7 +172,7 @@ msgstr "Nueva categoría"
 
 #: ckanext/topics/templates/topic/index.html:45
 msgid "Edit"
-msgstr "Editar"
+msgstr "Editatu"
 
 #: ckanext/topics/templates/topic/index.html:50
 msgid "There are no subtopics"
@@ -188,4 +188,4 @@ msgstr "Nueva subcategoría"
 
 #: ckanext/topics/templates/user/dashboard.html:6
 msgid "Edit settings"
-msgstr "Editar ajustes"
+msgstr "Aukerak editatu"

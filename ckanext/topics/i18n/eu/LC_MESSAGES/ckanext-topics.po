@@ -45,7 +45,7 @@ msgstr "Ez duzu baimenik orrialde hau ikusteko"
 #: ckanext/topics/controllers/topic.py:62
 #: ckanext/topics/controllers/topic.py:97
 msgid "Position is already taken"
-msgstr "Posizioa dagoeneko okupatzen da"
+msgstr "Posizioa dagoeneko erabiltzen ari da"
 
 #: ckanext/topics/controllers/subtopic.py:65
 msgid "Subtopic created successfully"
@@ -53,11 +53,11 @@ msgstr "Azpikategoria behar bezala sortu da"
 
 #: ckanext/topics/controllers/subtopic.py:109
 msgid "Subtopic updated successfully"
-msgstr "Azpidaziorako zuzeneko eguneratua"
+msgstr "Azpikategoria zuzen eguneratu da"
 
 #: ckanext/topics/controllers/topic.py:67
 msgid "Topic created successfully"
-msgstr "Kategoria sortu behar bezala"
+msgstr "Kategoria behar bezala sortu da"
 
 #: ckanext/topics/controllers/topic.py:102
 msgid "Topic updated successfully"
@@ -93,7 +93,7 @@ msgstr "Popularrak bakarrik erakutsi {facet_type}"
 
 #: ckanext/topics/templates/snippets/facet_list.html:32
 msgid "There are no {facet_type} that match this search"
-msgstr "Ez dago bilaketa honekin bat egiten duen {facet_type}"
+msgstr "Ez dago bilaketa honekin bat egiten duen {facet_type}(r)ik"
 
 #: ckanext/topics/templates/snippets/search_form.html:17
 msgid "Remove"
@@ -116,13 +116,13 @@ msgstr "Izena"
 #: ckanext/topics/templates/subtopic/edit.html:32
 #: ckanext/topics/templates/topic/edit.html:29
 msgid "Position"
-msgstr "Posizio"
+msgstr "Posizioa"
 
 #: ckanext/topics/templates/subtopic/edit.html:40
 msgid ""
 "¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de "
 "los datasets asociados."
-msgstr "Ziur azpitalde hau ezabatu nahi duzula? Subtopicek lotutako datu multzoetatik desagertuko dira."
+msgstr "Ziur azpitalde hau ezabatu nahi duzula? Azpitaldea lotutako datu multzoetatik desagertuko da."
 
 #: ckanext/topics/templates/subtopic/edit.html:40
 #: ckanext/topics/templates/topic/edit.html:39
@@ -143,12 +143,12 @@ msgstr "Sortu"
 msgid ""
 "Do you really want to delete this topic and its subtopics? The topic and "
 "subtopics will be removed from the linked datasets."
-msgstr "Benetan kendu nahi duzu gai hau eta haren azpikontzetak? Gaia eta subtopiak loturiko datu multzoetatik kenduko dira."
+msgstr "Benetan kendu nahi duzu gai hau eta haren azpigaiak? Gaia eta azpigaiak loturiko datu multzoetatik kenduko dira."
 
 #: ckanext/topics/templates/topic/index.html:15
 #: ckanext/topics/templates/user/dashboard.html:9
 msgid "News feed"
-msgstr "Albiste Feed-a"
+msgstr "Albiste zerbitzua"
 
 #: ckanext/topics/templates/topic/index.html:16
 #: ckanext/topics/templates/user/dashboard.html:10

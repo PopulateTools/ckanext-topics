@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-topics 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-17 18:16+0100\n"
+"POT-Creation-Date: 2019-02-22 12:46+0100\n"
 "PO-Revision-Date: 2019-01-16 22:38+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: eu <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ckanext/topics/plugin.py:276
+#: ckanext/topics/plugin.py:282
 #: ckanext/topics/templates/scheming/form_snippets/topic_multiple.html:6
 #: ckanext/topics/templates/subtopic/edit.html:4
 #: ckanext/topics/templates/topic/base.html:3
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Topics"
 msgstr "Kategoriak"
 
-#: ckanext/topics/plugin.py:277 ckanext/topics/templates/topic/index.html:39
+#: ckanext/topics/plugin.py:283 ckanext/topics/templates/topic/index.html:39
 msgid "Subtopics"
 msgstr "Azpikategoriak"
 
@@ -122,7 +122,9 @@ msgstr "Posizioa"
 msgid ""
 "¿Estás seguro de que quieres borrar este subtema? El subtema desaparecerá de "
 "los datasets asociados."
-msgstr "Ziur azpitalde hau ezabatu nahi duzula? Azpitaldea lotutako datu multzoetatik desagertuko da."
+msgstr ""
+"Ziur azpitalde hau ezabatu nahi duzula? Azpitaldea lotutako datu "
+"multzoetatik desagertuko da."
 
 #: ckanext/topics/templates/subtopic/edit.html:40
 #: ckanext/topics/templates/topic/edit.html:39
@@ -143,7 +145,9 @@ msgstr "Sortu"
 msgid ""
 "Do you really want to delete this topic and its subtopics? The topic and "
 "subtopics will be removed from the linked datasets."
-msgstr "Benetan kendu nahi duzu gai hau eta haren azpigaiak? Gaia eta azpigaiak loturiko datu multzoetatik kenduko dira."
+msgstr ""
+"Benetan kendu nahi duzu gai hau eta haren azpigaiak? Gaia eta azpigaiak "
+"loturiko datu multzoetatik kenduko dira."
 
 #: ckanext/topics/templates/topic/index.html:15
 #: ckanext/topics/templates/user/dashboard.html:9

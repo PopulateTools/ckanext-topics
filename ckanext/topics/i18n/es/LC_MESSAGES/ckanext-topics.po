@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-topics 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-01-17 18:16+0100\n"
+"POT-Creation-Date: 2019-02-22 12:46+0100\n"
 "PO-Revision-Date: 2019-01-16 22:38+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: es <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ckanext/topics/plugin.py:276
+#: ckanext/topics/plugin.py:282
 #: ckanext/topics/templates/scheming/form_snippets/topic_multiple.html:6
 #: ckanext/topics/templates/subtopic/edit.html:4
 #: ckanext/topics/templates/topic/base.html:3
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Topics"
 msgstr "Categorías"
 
-#: ckanext/topics/plugin.py:277 ckanext/topics/templates/topic/index.html:39
+#: ckanext/topics/plugin.py:283 ckanext/topics/templates/topic/index.html:39
 msgid "Subtopics"
 msgstr "Subcategorías"
 

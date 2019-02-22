@@ -166,7 +166,6 @@ msgid "My Groups"
 msgstr "Nire taldeak"
 
 #: ckanext/topics/templates/topic/index.html:29
-#, fuzzy
 msgid "New topic"
 msgstr "Kategoria berria"
 
